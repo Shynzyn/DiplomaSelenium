@@ -13,7 +13,7 @@ public class BaseWebElement : IWebElement
     {
         get
         {
-            return Driver?.GetWait().Until(ExpectedConditions.ElementIsVisible(By));
+            return Driver?.GetWait(5).Until(ExpectedConditions.ElementIsVisible(By));
         }
     }
 
@@ -26,6 +26,8 @@ public class BaseWebElement : IWebElement
     {
         return Driver?.FindElement(by)!;
     }
+
+    public void WaitTillGone() => Driver?.GetWait().Until(ExpectedConditions.StalenessOf(WebElement));
 
     public string TagName => WebElement.TagName;
 

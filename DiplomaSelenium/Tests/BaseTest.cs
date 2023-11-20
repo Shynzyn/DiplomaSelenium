@@ -11,12 +11,15 @@ public class BaseTest
 
     protected BasePage BasePage;
     protected LoginPage LoginPage;
+    protected PimPage PimPage;
+    protected PerformancePage PerformancePage;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         Driver = BrowserFactory.GetDriver(BrowserType.Chrome);
         Driver.Manage().Window.Maximize();
+        LoginPage = new LoginPage(Driver);
     }
 
     [SetUp]
@@ -25,10 +28,16 @@ public class BaseTest
         LoginPage.LogIn();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        Driver.ClearLocalStorage();
+        Driver.Navigate().GoToUrl(SiteUrls.OrangeDemoLogout);
+    }
+
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
-        Driver.ClearLocalStorage();
         BrowserFactory.CloseDriver();
     }
 }

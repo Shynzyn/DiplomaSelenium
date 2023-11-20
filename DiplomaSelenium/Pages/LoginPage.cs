@@ -7,8 +7,8 @@ namespace DiplomaSelenium.Pages;
 
 public class LoginPage : BasePage
 {
-    private BaseInputField _usernameField = new BaseInputField(By.XPath("//input[@name='username']"));
-    private BaseInputField _passwordField = new BaseInputField(By.XPath("//input[@name='password']"));
+    private BaseInputField _usernameField = new (By.XPath("//input[@name='username']"));
+    private BaseInputField _passwordField = new (By.XPath("//input[@name='password']"));
 
     public LoginPage(IWebDriver driver) : base(driver)
     {

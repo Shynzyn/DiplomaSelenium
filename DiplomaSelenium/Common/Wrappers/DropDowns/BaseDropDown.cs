@@ -1,19 +1,23 @@
 ﻿using Common;
 using Common.Wrappers;
 using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DiplomaSelenium.Common.Wrappers;
+namespace DiplomaSelenium.Common.Wrappers.DropDowns;
 
 public class BaseDropDown : BaseWebElement
 {
     public BaseDropDown(By by) : base(by)
     {
         By = by;
+    }
+
+    public string GetOptionText(int optionNumber)
+    {
+        var xpathString = $"/li[{optionNumber}]//span";
+        var dropDownOption = new BaseWebElement(By.XPath($"{By.Criteria}{xpathString}"));
+        var optionText = dropDownOption.Text;
+
+        return optionText;
     }
 
     public void SelectByText(string text)

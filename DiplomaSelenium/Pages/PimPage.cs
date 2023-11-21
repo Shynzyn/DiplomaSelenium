@@ -38,7 +38,7 @@ public class PimPage : BasePage
         _employeeList.Click();
         _employeeNameField.EnterText(firstName);
         SubmitButton.Click();
-        var IsEmployeeFound = CheckIfRecordsFound(firstName);
+        var IsEmployeeFound = CheckIfRecordFound(firstName);
 
         return IsEmployeeFound;
     }

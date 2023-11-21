@@ -13,6 +13,7 @@ public class BaseTest
     protected LoginPage LoginPage;
     protected PimPage PimPage;
     protected PerformancePage PerformancePage;
+    protected AdminPage AdminPage;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()

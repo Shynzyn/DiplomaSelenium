@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 
@@ -75,5 +76,10 @@ public static class ExtensionMethods
     {
         var element = driver.GetWait().Until(ExpectedConditions.ElementIsVisible(by));
         driver.GetWait().Until(ExpectedConditions.StalenessOf(element));
+    }
+
+    public static Actions GetActions(this IWebDriver driver)
+    {
+        return new Actions(driver);
     }
 }

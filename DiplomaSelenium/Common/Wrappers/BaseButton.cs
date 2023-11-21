@@ -7,6 +7,5 @@ public class BaseButton : BaseWebElement
 {
     public BaseButton(By by) : base(by)
     {
-        By = by;
     }
 }

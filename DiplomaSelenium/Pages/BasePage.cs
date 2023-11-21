@@ -11,6 +11,7 @@ public class BasePage
 {
     protected IWebDriver Driver;
     protected BaseButton SubmitButton = new (By.XPath("//button[@type='submit']"));
+    protected BaseButton AddButton = new (By.XPath("//button[contains(., 'Add')]"));
     protected BaseWebElement ProfileNameSpan = new(By.XPath("//span[@class='oxd-userdropdown-tab']"));
     protected BaseDropDown ProfileDropDown = new(By.XPath("//ul[@class='oxd-dropdown-menu']"));
     protected BaseDropDown MainMenuDropDown = new(By.XPath("//ul[@class='oxd-main-menu']"));
@@ -45,9 +46,9 @@ public class BasePage
         return firstOption;
     }
 
-    public bool CheckIfRecordsFound(string text)
+    public bool CheckIfRecordFound(string text)
     {
-        var xpathString = $"//div[@class='oxd-table-card']/div/div/div[contains(., '{text}')]/../..";
+        var xpathString = $"//div[@class='oxd-table-card']/div/div/div[normalize-space()='{text}']/../..";
         try
         {
             var element = Driver.GetWait(2).Until(ExpectedConditions.ElementIsVisible(By.XPath(xpathString)));
@@ -61,7 +62,7 @@ public class BasePage
 
     public void DeleteRecord(string text)
     {
-        var foundRecord = new RecordElement(By.XPath($"//div[@class='oxd-table-card']/div/div/div[contains(., '{text}')]/../.."));
+        var foundRecord = new RecordElement(By.XPath($"//div[@class='oxd-table-card']/div/div/div[normalize-space()='{text}']/../.."));
         foundRecord.DeleteRecord();
     }
 }

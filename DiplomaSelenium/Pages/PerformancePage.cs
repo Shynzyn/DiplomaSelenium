@@ -34,7 +34,7 @@ public class PerformancePage : BasePage
         _jobTitleDropDown.SelectByText(JobTitle);
         SubmitButton.Click();
 
-        var kpiFound =  CheckIfRecordsFound(kpiName);
+        var kpiFound =  CheckIfRecordFound(kpiName);
 
         return kpiFound;
     }

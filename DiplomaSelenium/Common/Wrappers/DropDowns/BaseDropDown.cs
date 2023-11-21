@@ -8,7 +8,6 @@ public class BaseDropDown : BaseWebElement
 {
     public BaseDropDown(By by) : base(by)
     {
-        By = by;
     }
 
     public string GetOptionText(int optionNumber)

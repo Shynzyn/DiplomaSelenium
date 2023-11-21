@@ -7,7 +7,6 @@ public class ClickSelectDropDown : BaseDropDown
 {
     public ClickSelectDropDown(By by) : base(by)
     {
-        By = by;
     }
 
     public new void SelectByText(string text)

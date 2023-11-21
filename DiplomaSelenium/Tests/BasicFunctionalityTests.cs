@@ -10,16 +10,26 @@ public class BasicFunctionalityTests : BaseTest
     public void PageInitialization()
     {
         BasePage = new BasePage(Driver);
+        DashboardPage = new DashboardPage(Driver);
     }
 
     [Test]
     public void ValidateSearchFunctionality()
     {
+        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
+
         var firstOption = BasePage.SearchMainMenu("Time");
         var expectedFirstOption = "Time";
         Assert.That(expectedFirstOption, Is.EqualTo(firstOption));
 
         BasePage.LogOut();
         Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
+    }
+
+    public void ValidateDashboardAccess()
+    {
+        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
+
+        DashboardPage.NavigateMainMenu("Dashboard");
     }
 }

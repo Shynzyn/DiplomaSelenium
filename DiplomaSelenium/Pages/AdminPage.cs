@@ -1,7 +1,6 @@
 ﻿using DiplomaSelenium.Common.Wrappers;
 using DiplomaSelenium.Common.Wrappers.DropDowns;
 using OpenQA.Selenium;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace DiplomaSelenium.Pages;
 

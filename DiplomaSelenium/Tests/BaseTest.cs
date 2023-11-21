@@ -14,6 +14,7 @@ public class BaseTest
     protected PimPage PimPage;
     protected PerformancePage PerformancePage;
     protected AdminPage AdminPage;
+    protected DashboardPage DashboardPage;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()

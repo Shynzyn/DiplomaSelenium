@@ -39,6 +39,18 @@ public class BasePage
         MainMenuDropDown.SelectByText(text);
     }
 
+    public void NavigateTopNavBar(string mainOption, string dropDownOption = null)
+    {
+        var topNavBar = new TopNavBarDropDown();
+        topNavBar.Navigate(mainOption, dropDownOption);
+    }
+
+    public bool CheckTopNavBarOptionExist(string mainOption, string dropDownOption = null)
+    {
+        var topNavBar = new TopNavBarDropDown();
+        return topNavBar.CheckIfOptionExist(mainOption, dropDownOption);
+    }
+
     public string SearchMainMenu(string text)
     {
         MainMenuSearchField.SendKeys(text);

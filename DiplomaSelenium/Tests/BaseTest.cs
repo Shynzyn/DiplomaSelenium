@@ -15,6 +15,7 @@ public class BaseTest
     protected PerformancePage PerformancePage;
     protected AdminPage AdminPage;
     protected DashboardPage DashboardPage;
+    protected RecruitmentPage RecruitmentPage;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()

@@ -14,6 +14,7 @@ public class EmployeeManagementTests : BaseTest
     {
         PimPage = new PimPage(Driver);
         PerformancePage = new PerformancePage(Driver);
+        RecruitmentPage = new RecruitmentPage(Driver);
     }
 
     [Test]
@@ -50,5 +51,15 @@ public class EmployeeManagementTests : BaseTest
         kpiFound = PerformancePage.SearchKpi(kpiName, jobTitle);
 
         Assert.False(kpiFound);
+    }
+
+    [Test]
+    public void ValidateRecruitmentManagementFunctionality()
+    {
+        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
+
+        RecruitmentPage.NavigateMainMenu("Recruitment");
+
+        RecruitmentPage.NavigateTopNavBar("Vacancies");
     }
 }

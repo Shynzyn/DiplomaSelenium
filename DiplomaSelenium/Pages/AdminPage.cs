@@ -15,18 +15,6 @@ public class AdminPage : BasePage
         Driver = driver;
     }
 
-    public bool CheckIfUserManagementOptionAvailable()
-    {
-        var optionExist = _userManagement.CheckIfOptionExist("Users");
-        return optionExist;
-    }
-
-    public bool CheckIfJobTitlesOptionAvailable()
-    {
-        var optionExist = _job.CheckIfOptionExist("Job Titles");
-        return optionExist;
-    }
-
     public void ChangeNationality(string nationality, string nationalityEditted)
     {
         _nationalitiesButton.Click();

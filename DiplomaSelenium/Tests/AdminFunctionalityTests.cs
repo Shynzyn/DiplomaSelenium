@@ -19,10 +19,10 @@ public class AdminFunctionalityTests : BaseTest
 
         AdminPage.NavigateMainMenu("Admin");
 
-        var usersOptionExist = AdminPage.CheckIfUserManagementOptionAvailable();
+        var usersOptionExist = AdminPage.CheckTopNavBarOptionExist("User Management", "Users");
         Assert.That(usersOptionExist, Is.True, "Unable to locate User Management > Users");
 
-        var jobTitlesOptionExist = AdminPage.CheckIfJobTitlesOptionAvailable();
+        var jobTitlesOptionExist = AdminPage.CheckTopNavBarOptionExist("Job", "Job Titles");
         Assert.That(jobTitlesOptionExist, Is.True, "Unable to locate Job > Job Titles");
     }
 

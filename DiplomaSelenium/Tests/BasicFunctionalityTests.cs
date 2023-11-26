@@ -26,10 +26,19 @@ public class BasicFunctionalityTests : BaseTest
         Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
     }
 
+    [Test]
     public void ValidateDashboardAccess()
     {
         Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
 
         DashboardPage.NavigateMainMenu("Dashboard");
+
+        var expectedDashboardTitles = new List<string>() { "Time at Work", "My Actions", "Quick Launch" };
+        var dashboardTitles = DashboardPage.GetDashBoardElementsTitles();
+
+       foreach (var title in expectedDashboardTitles)
+        {
+            Assert.That(dashboardTitles.Contains(title), Is.True, $"Title {title} is not in dashboard titles list: {dashboardTitles}");
+        }
     }
 }

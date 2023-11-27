@@ -58,8 +58,26 @@ public class EmployeeManagementTests : BaseTest
     {
         Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
 
+        var vacancyName = "AQA Engineer";
+        var jobTitle = "QA Engineer";
+        var hiringManager = "m";
+
+        var randomId = new Random().Next(10000, 99999);
+        var vacancyNameWithRandomId = vacancyName + randomId;
+
         RecruitmentPage.NavigateMainMenu("Recruitment");
+        RecruitmentPage.AddNewVacancy(vacancyNameWithRandomId, jobTitle, hiringManager);
 
         RecruitmentPage.NavigateTopNavBar("Vacancies");
+        RecruitmentPage.SearchVacancy(jobTitle);
+
+        var IsRecordFound = RecruitmentPage.CheckIfRecordFound(vacancyNameWithRandomId);
+        Assert.That(IsRecordFound, Is.True, $"Vacancy was not found");
+
+        RecruitmentPage.DeleteRecord(vacancyNameWithRandomId);
+        RecruitmentPage.SearchVacancy(jobTitle);
+
+        IsRecordFound = RecruitmentPage.CheckIfRecordFound(vacancyNameWithRandomId);
+        Assert.That(IsRecordFound, Is.False, $"Vacancy was not deleted");
     }
 }

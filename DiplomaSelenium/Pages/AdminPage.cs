@@ -1,14 +1,11 @@
 ﻿using DiplomaSelenium.Common.Wrappers;
-using DiplomaSelenium.Common.Wrappers.DropDowns;
 using OpenQA.Selenium;
 
 namespace DiplomaSelenium.Pages;
 
 public class AdminPage : BasePage
 {
-    private TopNavBarDropDown _userManagement = new (By.XPath("//nav[@aria-label='Topbar Menu']//li[contains(., 'User Management')]"));
-    private TopNavBarDropDown _job = new (By.XPath("//nav[@aria-label='Topbar Menu']//li[contains(., 'Job')]"));
-    private BaseButton _nationalitiesButton = new (By.XPath("//nav[@aria-label='Topbar Menu']//li[contains(., 'Nationalities')]"));
+    private BaseButton _nationalitiesButton = new(By.XPath("//nav[@aria-label='Topbar Menu']//li[contains(., 'Nationalities')]"));
 
     public AdminPage(IWebDriver driver) : base(driver)
     {

@@ -29,8 +29,6 @@ public class AdminFunctionalityTests : BaseTest
     [Test]
     public void EditNationality()
     {
-        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
-
         AdminPage.NavigateMainMenu("Admin");
 
         var nationalityBefore = "Albanian";

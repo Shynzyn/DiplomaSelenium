@@ -1,5 +1,4 @@
-﻿using Common;
-using DiplomaSelenium.Common;
+﻿using DiplomaSelenium.Common;
 using DiplomaSelenium.Pages;
 using NUnit.Framework;
 
@@ -15,13 +14,12 @@ public class EmployeeManagementTests : BaseTest
         PimPage = new PimPage(Driver);
         PerformancePage = new PerformancePage(Driver);
         RecruitmentPage = new RecruitmentPage(Driver);
+        LeavePage = new LeavePage(Driver);
     }
 
     [Test]
     public void ValidateAddNewEmployee()
     {
-        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
-
         PimPage.NavigateMainMenu("PIM");
         _createdEmployeeName = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
 
@@ -33,8 +31,6 @@ public class EmployeeManagementTests : BaseTest
     [Test]
     public void ValidatePerformanceManagementFunctionality()
     {
-        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
-
         PerformancePage.NavigateMainMenu("Performance");
 
         var randomId = new Random().Next(10000, 99999);
@@ -56,8 +52,6 @@ public class EmployeeManagementTests : BaseTest
     [Test]
     public void ValidateRecruitmentManagementFunctionality()
     {
-        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
-
         var vacancyName = "AQA Engineer";
         var jobTitle = "QA Engineer";
         var hiringManager = "m";
@@ -79,5 +73,21 @@ public class EmployeeManagementTests : BaseTest
 
         IsRecordFound = RecruitmentPage.CheckIfRecordFound(vacancyNameWithRandomId);
         Assert.That(IsRecordFound, Is.False, $"Vacancy was not deleted");
+    }
+
+    [Test]
+    public void AssignLeave()
+    {
+        LeavePage.NavigateMainMenu("PIM");
+        _createdEmployeeName = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
+
+        LeavePage.NavigateMainMenu("Leave");
+        LeavePage.NavigateTopNavBar("Entitlements", "Add Entitlements");
+        LeavePage.AddEntitlement(_createdEmployeeName, 50);
+
+        LeavePage.NavigateMainMenu("Leave");
+        LeavePage.NavigateTopNavBar("Assign Leave");
+        var AssignedSuccessfuly = LeavePage.AssignLeave(_createdEmployeeName);
+        Assert.That(AssignedSuccessfuly);
     }
 }

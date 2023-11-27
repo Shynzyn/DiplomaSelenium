@@ -10,8 +10,9 @@ namespace DiplomaSelenium.Pages;
 public class BasePage
 {
     protected IWebDriver Driver;
-    protected BaseButton SubmitButton = new (By.XPath("//button[@type='submit']"));
-    protected BaseButton AddButton = new (By.XPath("//button[contains(., 'Add')]"));
+    protected BaseButton SubmitButton = new(By.XPath("//button[@type='submit']"));
+    protected BaseButton AddButton = new(By.XPath("//button[contains(., 'Add')]"));
+    protected BaseButton ConfirmButton = new(By.XPath("//button[contains(., 'Confirm')]"));
     protected BaseWebElement ProfileNameSpan = new(By.XPath("//span[@class='oxd-userdropdown-tab']"));
     protected BaseDropDown ProfileDropDown = new(By.XPath("//ul[@class='oxd-dropdown-menu']"));
     protected BaseDropDown MainMenuDropDown = new(By.XPath("//ul[@class='oxd-main-menu']"));
@@ -60,6 +61,10 @@ public class BasePage
 
     public bool CheckIfRecordFound(string text)
     {
+        if (text == null)
+        {
+            return false;
+        }
         var xpathString = $"//div[@class='oxd-table-card']/div/div/div[normalize-space()='{text}']/../..";
         try
         {

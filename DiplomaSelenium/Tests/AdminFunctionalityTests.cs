@@ -1,4 +1,5 @@
 ﻿using Common;
+using DiplomaSelenium.Common;
 using DiplomaSelenium.Pages;
 using NUnit.Framework;
 
@@ -42,5 +43,18 @@ public class AdminFunctionalityTests : BaseTest
         AdminPage.ChangeNationality(nationalityAfter, nationalityBefore);
         nationalityEdittedSuccessfully = AdminPage.CheckIfRecordFound(nationalityBefore);
         Assert.That(nationalityEdittedSuccessfully, Is.True, $"Failed to revert nationality back to original");
+    }
+
+    [Test]
+    public void AddJobTitle()
+    {
+        AdminPage.NavigateMainMenu("Admin");
+        AdminPage.NavigateTopNavBar("Job", "Job Titles");
+
+        var jobTitleWithRandomId = AdminPage.ModifyWithRandomId(Constants.JobTitle);
+        AdminPage.AddJobTitle(jobTitleWithRandomId);
+
+        var isJobTitleCreatedSuccessfuly = AdminPage.CheckIfRecordFound(jobTitleWithRandomId);
+        Assert.That(isJobTitleCreatedSuccessfuly, Is.True, $"Job title: {jobTitleWithRandomId} was not found in job titles list");
     }
 }

@@ -1,4 +1,5 @@
-﻿using DiplomaSelenium.Common;
+﻿using Common;
+using DiplomaSelenium.Common;
 using DiplomaSelenium.Pages;
 using NUnit.Framework;
 
@@ -89,5 +90,54 @@ public class EmployeeManagementTests : BaseTest
         LeavePage.NavigateTopNavBar("Assign Leave");
         var AssignedSuccessfuly = LeavePage.AssignLeave(_createdEmployeeName);
         Assert.That(AssignedSuccessfuly);
+    }
+
+    [Test]
+    public void SearchEmployee()
+    {
+        PimPage.NavigateMainMenu("PIM");
+        _createdEmployeeName = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
+
+        var isEmployeeFound = PimPage.SearchEmployee(_createdEmployeeName);
+        Assert.That(isEmployeeFound, Is.True);
+
+        isEmployeeFound = PimPage.SearchEmployee("1234567");
+        Assert.That(isEmployeeFound, Is.False);
+
+        PimPage.LogOut();
+        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
+    }
+
+    [Test]
+    public void EditEmployeeDetails()
+    {
+        PimPage.NavigateMainMenu("PIM");
+        _createdEmployeeName = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
+
+        PimPage.SearchEmployee(_createdEmployeeName);
+        var updatedEmployeeName = PimPage.EditEmployeeName(_createdEmployeeName, "Bob33123");
+
+        var isUpdatedEmployeeFound = PimPage.SearchEmployee(updatedEmployeeName);
+        Assert.That(isUpdatedEmployeeFound, Is.True);
+
+        PimPage.LogOut();
+        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
+    }
+
+    [Test]
+    public void DeleteEmployee()
+    {
+        PimPage.NavigateMainMenu("PIM");
+        _createdEmployeeName = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
+
+        var isEmployeeFound = PimPage.SearchEmployee(_createdEmployeeName);
+        Assert.That(isEmployeeFound, Is.True);
+
+        PimPage.DeleteRecord(_createdEmployeeName);
+        isEmployeeFound = PimPage.SearchEmployee(_createdEmployeeName);
+        Assert.That(isEmployeeFound, Is.False);
+
+        PimPage.LogOut();
+        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
     }
 }

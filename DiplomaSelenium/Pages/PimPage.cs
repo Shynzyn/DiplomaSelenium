@@ -36,10 +36,24 @@ public class PimPage : BasePage
     public bool SearchEmployee(string firstName)
     {
         _employeeList.Click();
-        _employeeNameField.EnterText(firstName);
-        SubmitButton.Click();
-        var IsEmployeeFound = CheckIfRecordFound(firstName);
+        try
+        {
+            _employeeNameField.EnterText(firstName);
+            SubmitButton.Click();
+            var IsEmployeeFound = CheckIfRecordFound(firstName);
+            return IsEmployeeFound;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
-        return IsEmployeeFound;
+    public string EditEmployeeName(string employeeFirstName, string updatedFirstName)
+    {
+        EditRecord(employeeFirstName);
+        _firstNameField.ForceEnterText(updatedFirstName);
+        SubmitButton.Click();
+        return updatedFirstName;
     }
 }

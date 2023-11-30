@@ -82,4 +82,16 @@ public class BasePage
         var foundRecord = new RecordElement(By.XPath($"//div[@class='oxd-table-card']/div/div/div[normalize-space()='{text}']/../.."));
         foundRecord.DeleteRecord();
     }
+
+    public void EditRecord(string text)
+    {
+        var foundRecord = new RecordElement(By.XPath($"//div[@class='oxd-table-card']/div/div/div[normalize-space()='{text}']/../.."));
+        foundRecord.ClickEditRecord();
+    }
+
+    public string ModifyWithRandomId(string text)
+    {
+        var randomId = new Random().Next(10000, 99999);
+        return text + randomId;
+    }
 }

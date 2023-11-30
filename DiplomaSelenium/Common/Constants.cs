@@ -6,4 +6,5 @@ public static class Constants
     public const string Password = "admin123";
     public const string EmployeeName = "Hardworking";
     public const string EmployeeLastName = "Employee";
+    public const string JobTitle = "Accountant";
 }

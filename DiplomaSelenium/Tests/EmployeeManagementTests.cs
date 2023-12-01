@@ -140,4 +140,25 @@ public class EmployeeManagementTests : BaseTest
         PimPage.LogOut();
         Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
     }
+
+    [Test]
+    public void ValidateCandidateManagementInRecruitmentFunctionality()
+    {
+        RecruitmentPage.NavigateMainMenu("Recruitment");
+
+        var firstNameWithId = RecruitmentPage.ModifyWithRandomId(Constants.EmployeeName);
+        RecruitmentPage.AddCandidate(firstNameWithId, Constants.EmployeeLastName, Constants.Vacancy, Constants.Email);
+
+        RecruitmentPage.NavigateTopNavBar("Candidates");
+
+        RecruitmentPage.SearchCandidate(firstNameWithId);
+        var isCandidateFound = RecruitmentPage.CheckIfRecordFound(Constants.Vacancy);
+        Assert.That(isCandidateFound, Is.True);
+
+        RecruitmentPage.DeleteRecord(Constants.Vacancy);
+        RecruitmentPage.SearchCandidate(firstNameWithId);
+
+        isCandidateFound = RecruitmentPage.CheckIfRecordFound(Constants.Vacancy);
+        Assert.That(isCandidateFound, Is.False);
+    }
 }

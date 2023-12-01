@@ -57,4 +57,37 @@ public class AdminFunctionalityTests : BaseTest
         var isJobTitleCreatedSuccessfuly = AdminPage.CheckIfRecordFound(jobTitleWithRandomId);
         Assert.That(isJobTitleCreatedSuccessfuly, Is.True, $"Job title: {jobTitleWithRandomId} was not found in job titles list");
     }
+
+    [Test]
+    public void SearchAdmin()
+    {
+        AdminPage.NavigateMainMenu("Admin");
+
+        var usernameWithId = AdminPage.ModifyWithRandomId(Constants.UserAdminUsername);
+
+        AdminPage.CreateAdminUser(usernameWithId, Constants.Password);
+        AdminPage.NavigateTopNavBar("User Management", "Users");
+
+        AdminPage.SearchAdminUser(usernameWithId);
+
+        var isRecordFound = AdminPage.CheckIfRecordFound(usernameWithId);
+        Assert.That(isRecordFound, Is.True);
+    }
+
+    [Test]
+    public void ResetPassword()
+    {
+
+        AdminPage.NavigateMainMenu("Admin");
+
+        var usernameWithId = AdminPage.ModifyWithRandomId(Constants.UserAdminUsername);
+
+        AdminPage.CreateAdminUser(usernameWithId, Constants.Password);
+
+        AdminPage.LogOut();
+
+        var message = LoginPage.ResetPassowrd(usernameWithId);
+        var expectedMessage = "Reset Password link sent successfully";
+        Assert.That(message == expectedMessage);
+    }
 }

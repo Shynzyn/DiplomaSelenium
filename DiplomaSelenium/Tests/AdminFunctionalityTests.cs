@@ -78,7 +78,6 @@ public class AdminFunctionalityTests : BaseTest
     [Test]
     public void ResetPassword()
     {
-
         AdminPage.NavigateMainMenu("Admin");
 
         var usernameWithId = AdminPage.ModifyWithRandomId(Constants.UserAdminUsername);
@@ -133,6 +132,6 @@ public class AdminFunctionalityTests : BaseTest
         PimPage.SearchEmployee(employeeNameWithId);
         PimPage.EditRecord(employeeNameWithId);
         var customFieldText = PimPage.GetCustomFieldText(customFieldNameWithId, Constants.CustomFieldCategory);
-        Assert.That(customFieldText == Constants.CustomFieldText);
+        Assert.That(customFieldText == Constants.CustomFieldText, $"Custom Field Text {customFieldText} is not equal to {Constants.CustomFieldText}");
     }
 }

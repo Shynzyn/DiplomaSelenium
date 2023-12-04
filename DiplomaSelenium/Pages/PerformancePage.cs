@@ -1,5 +1,6 @@
 ﻿using DiplomaSelenium.Common.Wrappers;
 using DiplomaSelenium.Common.Wrappers.DropDowns;
+using DiplomaSelenium.Common.Wrappers.InputFields;
 using OpenQA.Selenium;
 
 namespace DiplomaSelenium.Pages;
@@ -11,7 +12,6 @@ public class PerformancePage : BasePage
     private BaseDropDown _configureDropDown = new(By.XPath("//ul[@class='oxd-dropdown-menu']"));
     private BaseInputField _kpiField = new(By.XPath("(//input[@class='oxd-input oxd-input--active'])[2]"));
     private ClickSelectDropDown _jobTitleDropDown = new(By.XPath("//label[contains(., 'Job Title')]/../following-sibling::div"));
-
 
     public PerformancePage(IWebDriver driver) : base(driver)
     {
@@ -34,7 +34,7 @@ public class PerformancePage : BasePage
         _jobTitleDropDown.SelectByText(JobTitle);
         SubmitButton.Click();
 
-        var kpiFound =  CheckIfRecordFound(kpiName);
+        var kpiFound = CheckIfRecordFound(kpiName);
 
         return kpiFound;
     }

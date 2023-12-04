@@ -1,5 +1,4 @@
-﻿using DiplomaSelenium.Common.Wrappers;
-using DiplomaSelenium.Common.Wrappers.DropDowns;
+﻿using DiplomaSelenium.Common.Wrappers.DropDowns;
 using DiplomaSelenium.Common.Wrappers.InputFields;
 using OpenQA.Selenium;
 
@@ -15,6 +14,7 @@ public class RecruitmentPage : BasePage
     private ClickSelectDropDown _vacancyDropDown = new ClickSelectDropDown(By.XPath("//label[text()='Vacancy']/..//following-sibling::div/div/div"));
     private SuggestionInputField _hiringManagerField = new SuggestionInputField(By.XPath("//label[contains(., 'Hiring Manager')]/../following-sibling::div//input"));
     private SuggestionInputField _candidateName = new SuggestionInputField(By.XPath("//label[contains(., 'Candidate Name')]/../following-sibling::div//input"));
+
     public RecruitmentPage(IWebDriver driver) : base(driver)
     {
         Driver = driver;

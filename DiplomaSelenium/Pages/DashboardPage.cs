@@ -18,5 +18,4 @@ public class DashboardPage : BasePage
         var dashboardElementsTitles = dashboardElements.Select(x => x.Text).ToList();
         return dashboardElementsTitles;
     }
-
 }

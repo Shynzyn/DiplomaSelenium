@@ -58,6 +58,5 @@ public class AdminPage : BasePage
     {
         _usernameField.EnterText(username);
         SubmitButton.Click();
-
     }
 }

@@ -41,13 +41,13 @@ public class EmployeeManagementTests : BaseTest
         PerformancePage.AddNewKpi(kpiName, jobTitle);
         var kpiFound = PerformancePage.SearchKpi(kpiName, jobTitle);
 
-        Assert.True(kpiFound);
+        Assert.True(kpiFound, $"kpi wasn't found");
 
         PerformancePage.DeleteKpi(kpiName);
 
         kpiFound = PerformancePage.SearchKpi(kpiName, jobTitle);
 
-        Assert.False(kpiFound);
+        Assert.False(kpiFound, $"kpi was not deleted successfully");
     }
 
     [Test]
@@ -89,7 +89,7 @@ public class EmployeeManagementTests : BaseTest
         LeavePage.NavigateMainMenu("Leave");
         LeavePage.NavigateTopNavBar("Assign Leave");
         var AssignedSuccessfuly = LeavePage.AssignLeave(_createdEmployeeName);
-        Assert.That(AssignedSuccessfuly);
+        Assert.That(AssignedSuccessfuly, "Leave wasn't assigned successfully");
     }
 
     [Test]
@@ -99,10 +99,10 @@ public class EmployeeManagementTests : BaseTest
         _createdEmployeeName = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
 
         var isEmployeeFound = PimPage.SearchEmployee(_createdEmployeeName);
-        Assert.That(isEmployeeFound, Is.True);
+        Assert.That(isEmployeeFound, Is.True, "Employee was not found");
 
         isEmployeeFound = PimPage.SearchEmployee("1234567");
-        Assert.That(isEmployeeFound, Is.False);
+        Assert.That(isEmployeeFound, Is.False, "Employee was not deleted");
 
         PimPage.LogOut();
         Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
@@ -118,7 +118,7 @@ public class EmployeeManagementTests : BaseTest
         var updatedEmployeeName = PimPage.EditEmployeeName(_createdEmployeeName, "Bob33123");
 
         var isUpdatedEmployeeFound = PimPage.SearchEmployee(updatedEmployeeName);
-        Assert.That(isUpdatedEmployeeFound, Is.True);
+        Assert.That(isUpdatedEmployeeFound, Is.True, $"Updated employee: {updatedEmployeeName} was not found");
 
         PimPage.LogOut();
         Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
@@ -131,11 +131,11 @@ public class EmployeeManagementTests : BaseTest
         _createdEmployeeName = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
 
         var isEmployeeFound = PimPage.SearchEmployee(_createdEmployeeName);
-        Assert.That(isEmployeeFound, Is.True);
+        Assert.That(isEmployeeFound, Is.True, $"Employee: {_createdEmployeeName} was not found");
 
         PimPage.DeleteRecord(_createdEmployeeName);
         isEmployeeFound = PimPage.SearchEmployee(_createdEmployeeName);
-        Assert.That(isEmployeeFound, Is.False);
+        Assert.That(isEmployeeFound, Is.False, $"Employee: {_createdEmployeeName} was not deleted");
 
         PimPage.LogOut();
         Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
@@ -153,13 +153,13 @@ public class EmployeeManagementTests : BaseTest
 
         RecruitmentPage.SearchCandidate(firstNameWithId);
         var isCandidateFound = RecruitmentPage.CheckIfRecordFound(Constants.Vacancy);
-        Assert.That(isCandidateFound, Is.True);
+        Assert.That(isCandidateFound, Is.True, $"Candidate {firstNameWithId} was not found");
 
         RecruitmentPage.DeleteRecord(Constants.Vacancy);
         RecruitmentPage.SearchCandidate(firstNameWithId);
 
         isCandidateFound = RecruitmentPage.CheckIfRecordFound(Constants.Vacancy);
-        Assert.That(isCandidateFound, Is.False);
+        Assert.That(isCandidateFound, Is.False, $"Candidate {firstNameWithId} was not deleted");
     }
 
     [Test]
@@ -168,7 +168,7 @@ public class EmployeeManagementTests : BaseTest
         PimPage.NavigateMainMenu("PIM");
         var employeeNameWithId = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
         var employeeFound = PimPage.SearchEmployee(employeeNameWithId);
-        Assert.That(employeeFound);
+        Assert.That(employeeFound, $"Employee {employeeNameWithId} was not found");
 
         PimPage.EditRecord(employeeNameWithId);
         PimPage.AddSkill(Constants.SkillName, Constants.YearsOfExp);
@@ -176,6 +176,6 @@ public class EmployeeManagementTests : BaseTest
         PimPage.SearchEmployee(employeeNameWithId);
         PimPage.EditRecord(employeeNameWithId);
         var isSkillAssigned = PimPage.CheckIfSkillAssigned(Constants.SkillName);
-        Assert.That(isSkillAssigned, Is.True);
+        Assert.That(isSkillAssigned, Is.True, $"Skill was not assigned to employe: {employeeNameWithId}");
     }
 }

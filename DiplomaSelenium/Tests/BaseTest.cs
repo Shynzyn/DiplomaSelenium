@@ -8,7 +8,6 @@ namespace DiplomaSelenium.Tests;
 public class BaseTest
 {
     protected IWebDriver Driver;
-
     protected BasePage BasePage;
     protected LoginPage LoginPage;
     protected PimPage PimPage;

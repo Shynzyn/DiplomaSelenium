@@ -1,5 +1,4 @@
-﻿using Common;
-using Common.Wrappers;
+﻿using Common.Wrappers;
 using OpenQA.Selenium;
 
 namespace DiplomaSelenium.Common.Wrappers.DropDowns;

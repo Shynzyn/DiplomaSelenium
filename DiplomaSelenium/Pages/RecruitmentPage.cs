@@ -1,4 +1,5 @@
-﻿using DiplomaSelenium.Common.Wrappers.DropDowns;
+﻿using DiplomaSelenium.Common.Wrappers;
+using DiplomaSelenium.Common.Wrappers.DropDowns;
 using DiplomaSelenium.Common.Wrappers.InputFields;
 using OpenQA.Selenium;
 

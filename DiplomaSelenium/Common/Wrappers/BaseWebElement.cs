@@ -27,6 +27,8 @@ public class BaseWebElement : IWebElement
         return Driver?.FindElement(by)!;
     }
 
+    public string GetClassName() => WebElement.GetAttribute("class");
+
     public void WaitTillGone() => Driver?.GetWait().Until(ExpectedConditions.StalenessOf(WebElement));
 
     public string TagName => WebElement.TagName;

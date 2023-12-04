@@ -1,12 +1,13 @@
 ﻿using Common.Wrappers;
+using DiplomaSelenium.Common.Wrappers.DropDowns;
 using OpenQA.Selenium;
 
-namespace DiplomaSelenium.Common.Wrappers.DropDowns;
+namespace DiplomaSelenium.Common.Wrappers.NavBars;
 
-public class TopNavBarDropDown : BaseDropDown
+public class TopNavBar : BaseDropDown
 {
 
-    public TopNavBarDropDown(By by = null) : base(by)
+    public TopNavBar(By by = null) : base(by)
     {
         By = By.XPath($"//nav[@aria-label='Topbar Menu']");
     }

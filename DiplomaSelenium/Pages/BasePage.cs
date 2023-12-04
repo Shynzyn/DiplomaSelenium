@@ -2,6 +2,7 @@
 using Common.Wrappers;
 using DiplomaSelenium.Common.Wrappers;
 using DiplomaSelenium.Common.Wrappers.DropDowns;
+using DiplomaSelenium.Common.Wrappers.NavBars;
 using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
 
@@ -42,13 +43,13 @@ public class BasePage
 
     public void NavigateTopNavBar(string mainOption, string dropDownOption = null)
     {
-        var topNavBar = new TopNavBarDropDown();
+        var topNavBar = new TopNavBar();
         topNavBar.Navigate(mainOption, dropDownOption);
     }
 
     public bool CheckTopNavBarOptionExist(string mainOption, string dropDownOption = null)
     {
-        var topNavBar = new TopNavBarDropDown();
+        var topNavBar = new TopNavBar();
         return topNavBar.CheckIfOptionExist(mainOption, dropDownOption);
     }
 

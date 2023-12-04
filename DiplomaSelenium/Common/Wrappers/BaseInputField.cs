@@ -22,4 +22,9 @@ public class BaseInputField : BaseWebElement
         WebElement.SendKeys(Keys.Control + "a" + Keys.Delete);
         WebElement.SendKeys(text);
     }
+
+    public string GetText()
+    {
+        return WebElement.GetAttribute("value");
+    }
 }

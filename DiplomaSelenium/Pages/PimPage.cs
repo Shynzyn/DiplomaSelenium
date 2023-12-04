@@ -1,5 +1,8 @@
-﻿using DiplomaSelenium.Common.Wrappers;
+﻿using Common.Wrappers;
+using DiplomaSelenium.Common.Wrappers;
+using DiplomaSelenium.Common.Wrappers.DropDowns;
 using DiplomaSelenium.Common.Wrappers.InputFields;
+using DiplomaSelenium.Common.Wrappers.NavBars;
 using OpenQA.Selenium;
 
 namespace DiplomaSelenium.Pages;
@@ -11,6 +14,13 @@ public class PimPage : BasePage
     private BaseInputField _lastNameField = new(By.XPath("//input[@name='lastName']"));
     private BaseButton _employeeList = new(By.XPath("//nav[@aria-label='Topbar Menu']/ul/li[2]/a"));
     private SuggestionInputField _employeeNameField = new(By.XPath("//label[contains(., 'Employee Name')]/../following-sibling::div//input"));
+    private BaseInputField _customField = new(By.XPath("//label[contains(., 'Field Name')]/../following-sibling::div//input"));
+    private ClickSelectDropDown _customFieldCategory = new(By.XPath("//label[contains(., 'Screen')]/../following-sibling::div/div/div"));
+    private ClickSelectDropDown _customFieldType = new(By.XPath("//label[contains(., 'Type')]/../following-sibling::div/div/div"));
+    private EmployeeDetailsNavBar _employeeDetailsNavBar = new();
+    private ClickSelectDropDown _skillDropDown = new(By.XPath("//label[contains(., 'Skill')]/../following-sibling::div/div/div"));
+    private BaseInputField _yearsOfExperienceField = new(By.XPath("//label[contains(., 'Years of Experience')]/../following-sibling::div//input"));
+    private BaseInputField _commentField = new(By.XPath("//label[contains(., 'Comments')]/../following-sibling::div//textarea"));
 
     public PimPage(IWebDriver driver) : base(driver)
     {
@@ -55,5 +65,89 @@ public class PimPage : BasePage
         _firstNameField.ForceEnterText(updatedFirstName);
         SubmitButton.Click();
         return updatedFirstName;
+    }
+
+    public void AddCustomField(string customFieldName, string category)
+    {
+        AddButton.Click();
+        _customField.EnterText(customFieldName);
+        _customFieldCategory.SelectByText(category);
+        _customFieldType.SelectByText("Text or Number");
+        SubmitButton.Click();
+        SuccessToaster.WaitTillGone();
+    }
+
+    private bool CheckIfCustomFieldExistInCategory(string customFieldName, string category)
+    {
+        Thread.Sleep(1000);
+        var categoryTab = new BaseWebElement(By.XPath($"//div[@class='orangehrm-tabs']//a[contains(., '{category}')]"));
+        var categoryClass = categoryTab.GetClassName();
+        var activeClass = "orangehrm-tabs-item --active";
+
+        if (categoryClass != activeClass)
+        {
+            categoryTab.Click();
+        }
+
+        var searchableField = Driver.FindElements(By.XPath($"//label[text()='{customFieldName}']/../following-sibling::div/input"));
+        var doesFieldExist = searchableField.Any();
+        return doesFieldExist;
+    }
+
+    public void UpdateCustomFieldText(string customFieldName, string category, string customFieldText)
+    {
+        var customFieldExist = CheckIfCustomFieldExistInCategory(customFieldName, category);
+
+        if (customFieldExist)
+        {
+            var searchableField = new BaseInputField(By.XPath($"//label[text()='{customFieldName}']/../following-sibling::div/input"));
+            searchableField.EnterText(customFieldText);
+
+            var saveButton = new BaseButton(By.XPath("//h6[contains(.,'Custom Fields')]/..//button"));
+            saveButton.Click();
+        }
+        else
+        {
+            throw new Exception($"Custom Field {customFieldName} was not found in {category}");
+        }
+    }
+
+    public string GetCustomFieldText(string customFieldName, string category)
+    {
+        var customFieldExist = CheckIfCustomFieldExistInCategory(customFieldName, category);
+        var customFieldText = "";
+
+        if (customFieldExist)
+        {
+            var searchableField = new BaseInputField(By.XPath($"//label[text()='{customFieldName}']/../following-sibling::div/input"));
+            customFieldText = searchableField.GetText();
+            return customFieldText;
+        }
+
+        return customFieldText;
+    }
+
+    public void AddSkill(string skillName, int yearsExp, string comment = null)
+    {
+        _employeeDetailsNavBar.Navigate("Qualifications");
+        var addSkillButton = new BaseButton(By.XPath("//h6[text()='Skills']/../button"));
+        addSkillButton.Click();
+
+        _skillDropDown.SelectByText(skillName);
+        _yearsOfExperienceField.SendKeys(yearsExp.ToString());
+
+        if (comment != null)
+        {
+            _commentField.EnterText(comment);
+        }
+
+        SubmitButton.Click();
+    }
+
+    public bool CheckIfSkillAssigned(string skillName)
+    {
+        _employeeDetailsNavBar.Navigate("Qualifications");
+        var isSkillFound = CheckIfRecordFound(skillName);
+        return isSkillFound;
     }
 }

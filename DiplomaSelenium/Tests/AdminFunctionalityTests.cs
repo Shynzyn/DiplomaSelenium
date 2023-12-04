@@ -11,6 +11,7 @@ public class AdminFunctionalityTests : BaseTest
     public void PageInitialization()
     {
         AdminPage = new AdminPage(Driver);
+        PimPage = new PimPage(Driver);
     }
 
     [Test]
@@ -89,5 +90,49 @@ public class AdminFunctionalityTests : BaseTest
         var message = LoginPage.ResetPassowrd(usernameWithId);
         var expectedMessage = "Reset Password link sent successfully";
         Assert.That(message == expectedMessage);
+    }
+
+    [Test]
+    public void ValidateJobTitlesManagementFunctionality()
+    {
+        AdminPage.NavigateMainMenu("Admin");
+        AdminPage.NavigateTopNavBar("Job", "Job Titles");
+
+        var jobTitleWithRandomId = AdminPage.ModifyWithRandomId(Constants.JobTitle);
+        AdminPage.AddJobTitle(jobTitleWithRandomId);
+
+        var jobTitleExist = AdminPage.CheckIfRecordFound(jobTitleWithRandomId);
+        Assert.That(jobTitleExist, Is.True, $"Job title: {jobTitleWithRandomId} was not found in job titles list");
+
+        AdminPage.DeleteRecord(jobTitleWithRandomId);
+        AdminPage.NavigateTopNavBar("Job", "Job Titles");
+        jobTitleExist = AdminPage.CheckIfRecordFound(jobTitleWithRandomId);
+        Assert.That(jobTitleExist, Is.False, $"Job title: {jobTitleWithRandomId} was not deleted successfully");
+    }
+
+    [Test]
+    public void ValidateAddCustomFieldsToEmployeeProfile()
+    {
+        PimPage.NavigateMainMenu("PIM");
+        PimPage.NavigateTopNavBar("Configuration", "Custom Fields");
+
+        var customFieldNameWithId = PimPage.ModifyWithRandomId(Constants.CustomFieldName);
+        PimPage.AddCustomField(customFieldNameWithId, Constants.CustomFieldCategory);
+
+        var customFieldExist = AdminPage.CheckIfRecordFound(customFieldNameWithId);
+        Assert.That(customFieldExist, Is.True, $"Custom Field: {customFieldNameWithId} was not created successfully");
+
+        PimPage.NavigateTopNavBar("Employee List");
+        var employeeNameWithId = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
+
+        PimPage.SearchEmployee(employeeNameWithId);
+        PimPage.EditRecord(employeeNameWithId);
+        PimPage.UpdateCustomFieldText(customFieldNameWithId, Constants.CustomFieldCategory, "Dog");
+
+        PimPage.NavigateTopNavBar("Employee List");
+        PimPage.SearchEmployee(employeeNameWithId);
+        PimPage.EditRecord(employeeNameWithId);
+        var customFieldText = PimPage.GetCustomFieldText(customFieldNameWithId, Constants.CustomFieldCategory);
+        Assert.That(customFieldText == Constants.CustomFieldText);
     }
 }

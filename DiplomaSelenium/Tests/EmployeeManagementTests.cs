@@ -161,4 +161,21 @@ public class EmployeeManagementTests : BaseTest
         isCandidateFound = RecruitmentPage.CheckIfRecordFound(Constants.Vacancy);
         Assert.That(isCandidateFound, Is.False);
     }
+
+    [Test]
+    public void ValidateAssignSkillToEmployeeProfile()
+    {
+        PimPage.NavigateMainMenu("PIM");
+        var employeeNameWithId = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
+        var employeeFound = PimPage.SearchEmployee(employeeNameWithId);
+        Assert.That(employeeFound);
+
+        PimPage.EditRecord(employeeNameWithId);
+        PimPage.AddSkill(Constants.SkillName, Constants.YearsOfExp);
+
+        PimPage.SearchEmployee(employeeNameWithId);
+        PimPage.EditRecord(employeeNameWithId);
+        var isSkillAssigned = PimPage.CheckIfSkillAssigned(Constants.SkillName);
+        Assert.That(isSkillAssigned, Is.True);
+    }
 }

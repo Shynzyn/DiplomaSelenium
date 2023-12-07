@@ -8,7 +8,7 @@ public class ClickSelectDropDown : BaseDropDown
     {
     }
 
-    public new void SelectByText(string text)
+    public override void SelectByText(string text)
     {
         WebElement!.Click();
 

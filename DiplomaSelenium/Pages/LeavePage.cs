@@ -4,6 +4,7 @@ using DiplomaSelenium.Common.Wrappers.InputFields;
 using OpenQA.Selenium;
 
 namespace DiplomaSelenium.Pages;
+
 public class LeavePage : BasePage
 {
     private ClickSelectDropDown _leaveTypeDropDown = new ClickSelectDropDown(By.XPath("//label[contains(., 'Leave Type')]/../following-sibling::div/div"));
@@ -12,17 +13,13 @@ public class LeavePage : BasePage
     private BaseInputField _fromDateField = new BaseInputField(By.XPath("//label[contains(., 'From Date')]/../following-sibling::div//input"));
     private BaseInputField _toDateField = new BaseInputField(By.XPath("//label[contains(., 'To Date')]/../following-sibling::div//input"));
 
-    public LeavePage(IWebDriver driver) : base(driver)
-    {
-    }
-
     public void AddEntitlement(string employeeName, int daysCredit)
     {
         _employeeNameField.EnterText(employeeName);
         _leaveTypeDropDown.SelectByText("CAN - Vacation");
         _entitlementField.EnterText(daysCredit.ToString());
-        SubmitButton.Click();
-        ConfirmButton.Click();
+        _submitButton.Click();
+        _confirmButton.Click();
     }
 
     public bool AssignLeave(string employeeName)
@@ -37,8 +34,8 @@ public class LeavePage : BasePage
         _toDateField.EnterText(toDate.ToString());
         _toDateField.Click();
         _toDateField.ForceEnterText(toDate.ToString());
-        SubmitButton.Click();
-        bool AssignedSuccess = SuccessToaster.Displayed;
-        return AssignedSuccess;
+        _submitButton.Click();
+        bool assignedSuccess = _successToaster.Displayed;
+        return assignedSuccess;
     }
 }

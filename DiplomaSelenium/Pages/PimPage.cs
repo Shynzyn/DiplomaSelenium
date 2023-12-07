@@ -1,5 +1,4 @@
-﻿using Common.Wrappers;
-using DiplomaSelenium.Common.Wrappers;
+﻿using DiplomaSelenium.Common.Wrappers;
 using DiplomaSelenium.Common.Wrappers.DropDowns;
 using DiplomaSelenium.Common.Wrappers.InputFields;
 using DiplomaSelenium.Common.Wrappers.NavBars;
@@ -22,11 +21,6 @@ public class PimPage : BasePage
     private BaseInputField _yearsOfExperienceField = new(By.XPath("//label[contains(., 'Years of Experience')]/../following-sibling::div//input"));
     private BaseInputField _commentField = new(By.XPath("//label[contains(., 'Comments')]/../following-sibling::div//textarea"));
 
-    public PimPage(IWebDriver driver) : base(driver)
-    {
-        Driver = driver;
-    }
-
     public string AddNewEmployee(string firstName, string lastName, int id = 0)
     {
         _addEmployee.Click();
@@ -37,8 +31,8 @@ public class PimPage : BasePage
         _firstNameField.SendKeys(firstNameWithId);
         _lastNameField.SendKeys(lastName);
 
-        SubmitButton.Click();
-        SuccessToaster.WaitTillGone();
+        _submitButton.Click();
+        _successToaster.WaitTillGone();
 
         return firstNameWithId;
     }
@@ -49,7 +43,7 @@ public class PimPage : BasePage
         try
         {
             _employeeNameField.EnterText(firstName);
-            SubmitButton.Click();
+            _submitButton.Click();
             var IsEmployeeFound = CheckIfRecordFound(firstName);
             return IsEmployeeFound;
         }
@@ -63,18 +57,18 @@ public class PimPage : BasePage
     {
         EditRecord(employeeFirstName);
         _firstNameField.ForceEnterText(updatedFirstName);
-        SubmitButton.Click();
+        _submitButton.Click();
         return updatedFirstName;
     }
 
     public void AddCustomField(string customFieldName, string category)
     {
-        AddButton.Click();
+        _addButton.Click();
         _customField.EnterText(customFieldName);
         _customFieldCategory.SelectByText(category);
         _customFieldType.SelectByText("Text or Number");
-        SubmitButton.Click();
-        SuccessToaster.WaitTillGone();
+        _submitButton.Click();
+        _successToaster.WaitTillGone();
     }
 
     private bool CheckIfCustomFieldExistInCategory(string customFieldName, string category)
@@ -89,7 +83,7 @@ public class PimPage : BasePage
             categoryTab.Click();
         }
 
-        var searchableField = Driver.FindElements(By.XPath($"//label[text()='{customFieldName}']/../following-sibling::div/input"));
+        var searchableField = _driver.FindElements(By.XPath($"//label[text()='{customFieldName}']/../following-sibling::div/input"));
         var doesFieldExist = searchableField.Any();
         return doesFieldExist;
     }
@@ -141,7 +135,7 @@ public class PimPage : BasePage
             _commentField.EnterText(comment);
         }
 
-        SubmitButton.Click();
+        _submitButton.Click();
     }
 
     public bool CheckIfSkillAssigned(string skillName)

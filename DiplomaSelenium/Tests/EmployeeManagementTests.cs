@@ -5,26 +5,31 @@ using NUnit.Framework;
 
 namespace DiplomaSelenium.Tests;
 
+[Parallelizable(ParallelScope.Fixtures)]
 public class EmployeeManagementTests : BaseTest
 {
+    private PimPage _pimPage;
+    private PerformancePage _performancePage;
+    private RecruitmentPage _recruitmentPage;
+    private LeavePage _leavePage;
     private string _createdEmployeeName;
 
     [OneTimeSetUp]
     public void PageInitialization()
     {
-        PimPage = new PimPage(Driver);
-        PerformancePage = new PerformancePage(Driver);
-        RecruitmentPage = new RecruitmentPage(Driver);
-        LeavePage = new LeavePage(Driver);
+        _pimPage = new PimPage();
+        _performancePage = new PerformancePage();
+        _recruitmentPage = new RecruitmentPage();
+        _leavePage = new LeavePage();
     }
 
     [Test]
     public void ValidateAddNewEmployee()
     {
-        PimPage.NavigateMainMenu("PIM");
-        _createdEmployeeName = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
+        _pimPage.NavigateMainMenu("PIM");
+        _createdEmployeeName = _pimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
 
-        var employeeIsFound = PimPage.SearchEmployee(_createdEmployeeName);
+        var employeeIsFound = _pimPage.SearchEmployee(_createdEmployeeName);
 
         Assert.That(employeeIsFound, $"Employee {_createdEmployeeName} was not found");
     }
@@ -32,20 +37,20 @@ public class EmployeeManagementTests : BaseTest
     [Test]
     public void ValidatePerformanceManagementFunctionality()
     {
-        PerformancePage.NavigateMainMenu("Performance");
+        _performancePage.NavigateMainMenu("Performance");
 
         var randomId = new Random().Next(10000, 99999);
         var kpiName = "PowerfullKPI" + randomId;
         var jobTitle = "QA Lead";
 
-        PerformancePage.AddNewKpi(kpiName, jobTitle);
-        var kpiFound = PerformancePage.SearchKpi(kpiName, jobTitle);
+        _performancePage.AddNewKpi(kpiName, jobTitle);
+        var kpiFound = _performancePage.SearchKpi(kpiName, jobTitle);
 
         Assert.True(kpiFound, $"kpi wasn't found");
 
-        PerformancePage.DeleteKpi(kpiName);
+        _performancePage.DeleteKpi(kpiName);
 
-        kpiFound = PerformancePage.SearchKpi(kpiName, jobTitle);
+        kpiFound = _performancePage.SearchKpi(kpiName, jobTitle);
 
         Assert.False(kpiFound, $"kpi was not deleted successfully");
     }
@@ -57,125 +62,123 @@ public class EmployeeManagementTests : BaseTest
         var jobTitle = "QA Engineer";
         var hiringManager = "m";
 
-        var randomId = new Random().Next(10000, 99999);
-        var vacancyNameWithRandomId = vacancyName + randomId;
+        var vacancyNameWithRandomId = vacancyName.ModifyWithRandomId();
+        _recruitmentPage.NavigateMainMenu("Recruitment");
+        _recruitmentPage.AddNewVacancy(vacancyNameWithRandomId, jobTitle, hiringManager);
 
-        RecruitmentPage.NavigateMainMenu("Recruitment");
-        RecruitmentPage.AddNewVacancy(vacancyNameWithRandomId, jobTitle, hiringManager);
+        _recruitmentPage.NavigateTopNavBar("Vacancies");
+        _recruitmentPage.SearchVacancy(jobTitle);
 
-        RecruitmentPage.NavigateTopNavBar("Vacancies");
-        RecruitmentPage.SearchVacancy(jobTitle);
-
-        var IsRecordFound = RecruitmentPage.CheckIfRecordFound(vacancyNameWithRandomId);
+        var IsRecordFound = _recruitmentPage.CheckIfRecordFound(vacancyNameWithRandomId);
         Assert.That(IsRecordFound, Is.True, $"Vacancy was not found");
 
-        RecruitmentPage.DeleteRecord(vacancyNameWithRandomId);
-        RecruitmentPage.SearchVacancy(jobTitle);
+        _recruitmentPage.DeleteRecord(vacancyNameWithRandomId);
+        _recruitmentPage.SearchVacancy(jobTitle);
 
-        IsRecordFound = RecruitmentPage.CheckIfRecordFound(vacancyNameWithRandomId);
+        IsRecordFound = _recruitmentPage.CheckIfRecordFound(vacancyNameWithRandomId);
         Assert.That(IsRecordFound, Is.False, $"Vacancy was not deleted");
     }
 
     [Test]
     public void AssignLeave()
     {
-        LeavePage.NavigateMainMenu("PIM");
-        _createdEmployeeName = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
+        _leavePage.NavigateMainMenu("PIM");
+        _createdEmployeeName = _pimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
 
-        LeavePage.NavigateMainMenu("Leave");
-        LeavePage.NavigateTopNavBar("Entitlements", "Add Entitlements");
-        LeavePage.AddEntitlement(_createdEmployeeName, 50);
+        _leavePage.NavigateMainMenu("Leave");
+        _leavePage.NavigateTopNavBar("Entitlements", "Add Entitlements");
+        _leavePage.AddEntitlement(_createdEmployeeName, 50);
 
-        LeavePage.NavigateMainMenu("Leave");
-        LeavePage.NavigateTopNavBar("Assign Leave");
-        var AssignedSuccessfuly = LeavePage.AssignLeave(_createdEmployeeName);
-        Assert.That(AssignedSuccessfuly, "Leave wasn't assigned successfully");
+        _leavePage.NavigateMainMenu("Leave");
+        _leavePage.NavigateTopNavBar("Assign Leave");
+        var assignedSuccessfuly = _leavePage.AssignLeave(_createdEmployeeName);
+        Assert.That(assignedSuccessfuly, "Leave wasn't assigned successfully");
     }
 
     [Test]
     public void SearchEmployee()
     {
-        PimPage.NavigateMainMenu("PIM");
-        _createdEmployeeName = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
+        _pimPage.NavigateMainMenu("PIM");
+        _createdEmployeeName = _pimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
 
-        var isEmployeeFound = PimPage.SearchEmployee(_createdEmployeeName);
+        var isEmployeeFound = _pimPage.SearchEmployee(_createdEmployeeName);
         Assert.That(isEmployeeFound, Is.True, "Employee was not found");
 
-        isEmployeeFound = PimPage.SearchEmployee("1234567");
+        isEmployeeFound = _pimPage.SearchEmployee("1234567");
         Assert.That(isEmployeeFound, Is.False, "Employee was not deleted");
 
-        PimPage.LogOut();
-        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
+        _pimPage.LogOut();
+        Assert.That(_driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
     }
 
     [Test]
     public void EditEmployeeDetails()
     {
-        PimPage.NavigateMainMenu("PIM");
-        _createdEmployeeName = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
+        _pimPage.NavigateMainMenu("PIM");
+        _createdEmployeeName = _pimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
 
-        PimPage.SearchEmployee(_createdEmployeeName);
-        var updatedEmployeeName = PimPage.EditEmployeeName(_createdEmployeeName, "Bob33123");
+        _pimPage.SearchEmployee(_createdEmployeeName);
+        var updatedEmployeeName = _pimPage.EditEmployeeName(_createdEmployeeName, "Bob33123");
 
-        var isUpdatedEmployeeFound = PimPage.SearchEmployee(updatedEmployeeName);
+        var isUpdatedEmployeeFound = _pimPage.SearchEmployee(updatedEmployeeName);
         Assert.That(isUpdatedEmployeeFound, Is.True, $"Updated employee: {updatedEmployeeName} was not found");
 
-        PimPage.LogOut();
-        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
+        _pimPage.LogOut();
+        Assert.That(_driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
     }
 
     [Test]
     public void DeleteEmployee()
     {
-        PimPage.NavigateMainMenu("PIM");
-        _createdEmployeeName = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
+        _pimPage.NavigateMainMenu("PIM");
+        _createdEmployeeName = _pimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
 
-        var isEmployeeFound = PimPage.SearchEmployee(_createdEmployeeName);
+        var isEmployeeFound = _pimPage.SearchEmployee(_createdEmployeeName);
         Assert.That(isEmployeeFound, Is.True, $"Employee: {_createdEmployeeName} was not found");
 
-        PimPage.DeleteRecord(_createdEmployeeName);
-        isEmployeeFound = PimPage.SearchEmployee(_createdEmployeeName);
+        _pimPage.DeleteRecord(_createdEmployeeName);
+        isEmployeeFound = _pimPage.SearchEmployee(_createdEmployeeName);
         Assert.That(isEmployeeFound, Is.False, $"Employee: {_createdEmployeeName} was not deleted");
 
-        PimPage.LogOut();
-        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
+        _pimPage.LogOut();
+        Assert.That(_driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
     }
 
     [Test]
     public void ValidateCandidateManagementInRecruitmentFunctionality()
     {
-        RecruitmentPage.NavigateMainMenu("Recruitment");
+        _recruitmentPage.NavigateMainMenu("Recruitment");
 
-        var firstNameWithId = RecruitmentPage.ModifyWithRandomId(Constants.EmployeeName);
-        RecruitmentPage.AddCandidate(firstNameWithId, Constants.EmployeeLastName, Constants.Vacancy, Constants.Email);
+        var firstNameWithId = Constants.EmployeeName.ModifyWithRandomId();
+        _recruitmentPage.AddCandidate(firstNameWithId, Constants.EmployeeLastName, Constants.Vacancy, Constants.Email);
 
-        RecruitmentPage.NavigateTopNavBar("Candidates");
+        _recruitmentPage.NavigateTopNavBar("Candidates");
 
-        RecruitmentPage.SearchCandidate(firstNameWithId);
-        var isCandidateFound = RecruitmentPage.CheckIfRecordFound(Constants.Vacancy);
+        _recruitmentPage.SearchCandidate(firstNameWithId);
+        var isCandidateFound = _recruitmentPage.CheckIfRecordFound(Constants.Vacancy);
         Assert.That(isCandidateFound, Is.True, $"Candidate {firstNameWithId} was not found");
 
-        RecruitmentPage.DeleteRecord(Constants.Vacancy);
-        RecruitmentPage.SearchCandidate(firstNameWithId);
+        _recruitmentPage.DeleteRecord(Constants.Vacancy);
+        _recruitmentPage.SearchCandidate(firstNameWithId);
 
-        isCandidateFound = RecruitmentPage.CheckIfRecordFound(Constants.Vacancy);
+        isCandidateFound = _recruitmentPage.CheckIfRecordFound(Constants.Vacancy);
         Assert.That(isCandidateFound, Is.False, $"Candidate {firstNameWithId} was not deleted");
     }
 
     [Test]
     public void ValidateAssignSkillToEmployeeProfile()
     {
-        PimPage.NavigateMainMenu("PIM");
-        var employeeNameWithId = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
-        var employeeFound = PimPage.SearchEmployee(employeeNameWithId);
+        _pimPage.NavigateMainMenu("PIM");
+        var employeeNameWithId = _pimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
+        var employeeFound = _pimPage.SearchEmployee(employeeNameWithId);
         Assert.That(employeeFound, $"Employee {employeeNameWithId} was not found");
 
-        PimPage.EditRecord(employeeNameWithId);
-        PimPage.AddSkill(Constants.SkillName, Constants.YearsOfExp);
+        _pimPage.EditRecord(employeeNameWithId);
+        _pimPage.AddSkill(Constants.SkillName, Constants.YearsOfExp);
 
-        PimPage.SearchEmployee(employeeNameWithId);
-        PimPage.EditRecord(employeeNameWithId);
-        var isSkillAssigned = PimPage.CheckIfSkillAssigned(Constants.SkillName);
+        _pimPage.SearchEmployee(employeeNameWithId);
+        _pimPage.EditRecord(employeeNameWithId);
+        var isSkillAssigned = _pimPage.CheckIfSkillAssigned(Constants.SkillName);
         Assert.That(isSkillAssigned, Is.True, $"Skill was not assigned to employe: {employeeNameWithId}");
     }
 }

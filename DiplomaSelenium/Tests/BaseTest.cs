@@ -5,37 +5,30 @@ using OpenQA.Selenium;
 
 namespace DiplomaSelenium.Tests;
 
-public class BaseTest
+public abstract class BaseTest
 {
-    protected IWebDriver Driver;
-    protected BasePage BasePage;
-    protected LoginPage LoginPage;
-    protected PimPage PimPage;
-    protected PerformancePage PerformancePage;
-    protected AdminPage AdminPage;
-    protected DashboardPage DashboardPage;
-    protected RecruitmentPage RecruitmentPage;
-    protected LeavePage LeavePage;
+    protected IWebDriver _driver;
+    private LoginPage _loginPage;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        Driver = BrowserFactory.GetDriver(BrowserType.Chrome);
-        Driver.Manage().Window.Maximize();
-        LoginPage = new LoginPage(Driver);
+        _driver = BrowserFactory.GetDriver(BrowserType.Chrome);
+        _driver.Manage().Window.Maximize();
+        _loginPage = new LoginPage();
     }
 
     [SetUp]
     public void SetUp()
     {
-        LoginPage.LogIn();
+        _loginPage.LogIn();
     }
 
     [TearDown]
     public void TearDown()
     {
-        Driver.ClearLocalStorage();
-        Driver.Navigate().GoToUrl(SiteUrls.OrangeDemoLogout);
+        _driver.ClearLocalStorage();
+        _driver.Navigate().GoToUrl(SiteUrls.OrangeDemoLogout);
     }
 
     [OneTimeTearDown]

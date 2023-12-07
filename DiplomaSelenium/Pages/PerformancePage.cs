@@ -1,6 +1,5 @@
 ﻿using DiplomaSelenium.Common.Wrappers;
 using DiplomaSelenium.Common.Wrappers.DropDowns;
-using DiplomaSelenium.Common.Wrappers.InputFields;
 using OpenQA.Selenium;
 
 namespace DiplomaSelenium.Pages;
@@ -13,26 +12,21 @@ public class PerformancePage : BasePage
     private BaseInputField _kpiField = new(By.XPath("(//input[@class='oxd-input oxd-input--active'])[2]"));
     private ClickSelectDropDown _jobTitleDropDown = new(By.XPath("//label[contains(., 'Job Title')]/../following-sibling::div"));
 
-    public PerformancePage(IWebDriver driver) : base(driver)
-    {
-        Driver = driver;
-    }
-
     public void AddNewKpi(string kpiName, string jobTitle)
     {
         NavigateToConfigureKpi();
         _addButton.Click();
         _kpiField.SendKeys(kpiName);
         _jobTitleDropDown.SelectByText(jobTitle);
-        SubmitButton.Click();
-        SuccessToaster.WaitTillGone();
+        _submitButton.Click();
+        _successToaster.WaitTillGone();
     }
 
     public bool SearchKpi(string kpiName, string JobTitle)
     {
         NavigateToConfigureKpi();
         _jobTitleDropDown.SelectByText(JobTitle);
-        SubmitButton.Click();
+        _submitButton.Click();
 
         var kpiFound = CheckIfRecordFound(kpiName);
 

@@ -1,9 +1,9 @@
-﻿namespace Common;
-
+﻿namespace DiplomaSelenium.Common;
 public static class HelperMethods
 {
-    public static string GenerateKeyString(string key, int times)
+    public static string ModifyWithRandomId(this string text)
     {
-        return string.Concat(Enumerable.Repeat(key, times));
+        var randomId = new Random().Next(10000, 99999);
+        return text + randomId;
     }
 }

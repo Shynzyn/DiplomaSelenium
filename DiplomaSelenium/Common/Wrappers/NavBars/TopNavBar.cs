@@ -1,5 +1,4 @@
-﻿using Common.Wrappers;
-using DiplomaSelenium.Common.Wrappers.DropDowns;
+﻿using DiplomaSelenium.Common.Wrappers.DropDowns;
 using OpenQA.Selenium;
 
 namespace DiplomaSelenium.Common.Wrappers.NavBars;

@@ -1,5 +1,4 @@
-﻿using Common.Wrappers;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 
 namespace DiplomaSelenium.Common.Wrappers.DropDowns;
 
@@ -11,10 +10,10 @@ public class ClickSelectDropDown : BaseDropDown
 
     public new void SelectByText(string text)
     {
-        WebElement.Click();
+        WebElement!.Click();
 
-        var xpathSring = $"//div[@role='listbox']/div[contains(., '{text}')]";
-        var option = new BaseWebElement(By.XPath(xpathSring));
+        var xpathString = $"//div[@role='listbox']/div[contains(., '{text}')]";
+        var option = new BaseWebElement(By.XPath(xpathString));
         option.Click();
     }
 }

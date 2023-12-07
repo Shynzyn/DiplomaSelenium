@@ -1,5 +1,4 @@
-﻿using Common.Wrappers;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 
 namespace DiplomaSelenium.Common.Wrappers.NavBars;
 public class EmployeeDetailsNavBar : BaseWebElement

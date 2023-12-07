@@ -16,47 +16,41 @@ public class AdminPage : BasePage
     private BaseInputField _passwordRepeatField = new(By.XPath("//label[text()='Confirm Password']/../..//input"));
     private SuggestionInputField _employeeNameField = new(By.XPath("//label[text()='Employee Name']/../..//input"));
 
-    public AdminPage(IWebDriver driver) : base(driver)
-    {
-        Driver = driver;
-    }
-
     public void ChangeNationality(string nationality, string nationalityEditted)
     {
         _nationalitiesButton.Click();
-        var nationalityRecord = new RecordElement(By.XPath($"//div[@class='oxd-table-card']/div/div/div[contains(., '{nationality}')]/../.."));
-        nationalityRecord.ClickEditRecord();
+        EditRecord(nationality);
 
         var nationalityNameInput = new BaseInputField(By.XPath("//label[contains(., 'Name')]/../following-sibling::div/input"));
         nationalityNameInput.ForceEnterText(nationalityEditted);
-        SubmitButton.Click();
-        SuccessToaster.WaitTillGone();
+        _submitButton.Click();
+        _successToaster.WaitTillGone();
     }
 
     public void AddJobTitle(string jobTitle)
     {
-        AddButton.Click();
+        _addButton.Click();
         _jobTitleField.SendKeys(jobTitle);
-        SubmitButton.Click();
-        SuccessToaster.WaitTillGone();
+        _submitButton.Click();
+        _successToaster.WaitTillGone();
     }
 
     public void CreateAdminUser(string username, string password)
     {
-        AddButton.Click();
+        _addButton.Click();
         _userRoleDropDown.SelectByText("Admin");
         _statusDropDown.SelectByText("Enabled");
         _employeeNameField.EnterText("a");
         _usernameField.EnterText(username);
         _passwordField.EnterText(password);
         _passwordRepeatField.EnterText(password);
-        SubmitButton.Click();
-        SuccessToaster.WaitTillGone();
+        _submitButton.Click();
+        _successToaster.WaitTillGone();
     }
 
     public void SearchAdminUser(string username)
     {
         _usernameField.EnterText(username);
-        SubmitButton.Click();
+        _submitButton.Click();
     }
 }

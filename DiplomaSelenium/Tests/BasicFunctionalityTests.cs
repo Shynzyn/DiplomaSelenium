@@ -4,33 +4,35 @@ using NUnit.Framework;
 
 namespace DiplomaSelenium.Tests;
 
+[Parallelizable(ParallelScope.Fixtures)]
 public class BasicFunctionalityTests : BaseTest
 {
-    [SetUp]
+    private DashboardPage _dashboardPage;
+
+    [OneTimeSetUp]
     public void PageInitialization()
     {
-        BasePage = new BasePage(Driver);
-        DashboardPage = new DashboardPage(Driver);
+        _dashboardPage = new DashboardPage();
     }
 
     [Test]
     public void ValidateSearchFunctionality()
     {
-        var firstOption = BasePage.SearchMainMenu("Time");
+        var firstOption = _dashboardPage.SearchMainMenu("Time");
         var expectedFirstOption = "Time";
         Assert.That(expectedFirstOption, Is.EqualTo(firstOption));
 
-        BasePage.LogOut();
-        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
+        _dashboardPage.LogOut();
+        Assert.That(_driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
     }
 
     [Test]
     public void ValidateDashboardAccess()
     {
-        DashboardPage.NavigateMainMenu("Dashboard");
+        _dashboardPage.NavigateMainMenu("Dashboard");
 
         var expectedDashboardTitles = new List<string>() { "Time at Work", "My Actions", "Quick Launch" };
-        var dashboardTitles = DashboardPage.GetDashBoardElementsTitles();
+        var dashboardTitles = _dashboardPage.GetDashBoardElementsTitles();
 
         foreach (var title in expectedDashboardTitles)
         {

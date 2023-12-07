@@ -1,5 +1,4 @@
-﻿using Common.Wrappers;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 
 namespace DiplomaSelenium.Common.Wrappers;
 
@@ -9,22 +8,22 @@ public class BaseInputField : BaseWebElement
     {
     }
 
-    public void EnterText(string text)
+    public virtual void EnterText(string text)
     {
-        WebElement.Click();
+        WebElement!.Click();
         WebElement.Clear();
         WebElement.SendKeys(text);
     }
 
-    public void ForceEnterText(string text)
+    public virtual void ForceEnterText(string text)
     {
-        WebElement.Click();
+        WebElement!.Click();
         WebElement.SendKeys(Keys.Control + "a" + Keys.Delete);
         WebElement.SendKeys(text);
     }
 
     public string GetText()
     {
-        return WebElement.GetAttribute("value");
+        return WebElement!.GetAttribute("value");
     }
 }

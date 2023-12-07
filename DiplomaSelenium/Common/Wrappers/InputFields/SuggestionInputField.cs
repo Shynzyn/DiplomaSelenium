@@ -1,5 +1,4 @@
-﻿using Common.Wrappers;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 
 namespace DiplomaSelenium.Common.Wrappers.InputFields;
 
@@ -10,9 +9,9 @@ internal class SuggestionInputField : BaseInputField
         By = by;
     }
 
-    public void EnterText(string text)
+    public override void EnterText(string text)
     {
-        WebElement.Click();
+        WebElement!.Click();
         WebElement.Clear();
         WebElement.SendKeys(text);
 
@@ -21,9 +20,9 @@ internal class SuggestionInputField : BaseInputField
         dropDownOption.Click();
     }
 
-    public void ForceEnterText(string text)
+    public override void ForceEnterText(string text)
     {
-        WebElement.Click();
+        WebElement!.Click();
         WebElement.SendKeys(Keys.Control + "a" + Keys.Delete);
         WebElement.SendKeys(text);
 

@@ -10,7 +10,7 @@ public class BrowserFactory
     [ThreadStatic]
     private static IWebDriver? _driver;
 
-    public static IWebDriver WebDriver => _driver;
+    public static IWebDriver WebDriver => _driver!;
 
     public static IWebDriver GetDriver(BrowserType browserType)
     {
@@ -24,23 +24,22 @@ public class BrowserFactory
 
     private static IWebDriver CreateDriverInstance(BrowserType browserType)
     {
-        IWebDriver driver = null;
         switch (browserType)
         {
             case BrowserType.Chrome:
-                driver = new ChromeDriver();
+                _driver = new ChromeDriver();
                 break;
             case BrowserType.Firefox:
-                driver = new FirefoxDriver();
+                _driver = new FirefoxDriver();
                 break;
             case BrowserType.Edge:
-                driver = new EdgeDriver();
+                _driver = new EdgeDriver();
                 break;
             default:
                 throw new NotSupportedException($"Browser type '{browserType}' is not supported.");
         }
 
-        return driver;
+        return _driver;
     }
 
     private static IWebDriver CreateDriverInstance(BrowserType browserType, ChromeOptions options)

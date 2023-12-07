@@ -16,52 +16,46 @@ public class RecruitmentPage : BasePage
     private SuggestionInputField _hiringManagerField = new SuggestionInputField(By.XPath("//label[contains(., 'Hiring Manager')]/../following-sibling::div//input"));
     private SuggestionInputField _candidateName = new SuggestionInputField(By.XPath("//label[contains(., 'Candidate Name')]/../following-sibling::div//input"));
 
-    public RecruitmentPage(IWebDriver driver) : base(driver)
-    {
-        Driver = driver;
-    }
-
     public void AddNewVacancy(string vacancyName, string jobTitle, string hiringManager)
     {
         NavigateTopNavBar("Vacancies");
-        AddButton.Click();
+        _addButton.Click();
         _vacancyNameField.EnterText(vacancyName);
         _jobTitleDropDown.SelectByText(jobTitle);
         _hiringManagerField.EnterText(hiringManager);
-        SubmitButton.Click();
+        _submitButton.Click();
     }
 
     public void SearchVacancy(string jobTitle)
     {
         NavigateTopNavBar("Vacancies");
         _jobTitleDropDown.SelectByText(jobTitle);
-        SubmitButton.Click();
+        _submitButton.Click();
     }
 
     public string AddCandidate(string firstName, string lastName, string vacancy, string email)
     {
         NavigateTopNavBar("Candidates");
-        AddButton.Click();
+        _addButton.Click();
         _firstNameField.EnterText(firstName);
         _lastNameField.EnterText(lastName);
         _vacancyDropDown.SelectByText(vacancy);
         _emailField.EnterText(email);
-        SubmitButton.Click();
+        _submitButton.Click();
 
         return firstName;
     }
 
-    public bool SearchCandidate(string firstName)
+    public void SearchCandidate(string firstName)
     {
         try
         {
             _candidateName.ForceEnterText(firstName);
-            SubmitButton.Click();
-            return true;
+            _submitButton.Click();
         }
         catch
         {
-            return false;
+            Console.WriteLine("Candidate name was not present");
         }
     }
 }

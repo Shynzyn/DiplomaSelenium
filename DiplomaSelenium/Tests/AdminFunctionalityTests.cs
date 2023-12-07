@@ -5,88 +5,94 @@ using NUnit.Framework;
 
 namespace DiplomaSelenium.Tests;
 
+[Parallelizable(ParallelScope.Fixtures)]
 public class AdminFunctionalityTests : BaseTest
 {
+    private AdminPage _adminPage;
+    private PimPage _pimPage;
+    private LoginPage _loginPage;
+
     [OneTimeSetUp]
     public void PageInitialization()
     {
-        AdminPage = new AdminPage(Driver);
-        PimPage = new PimPage(Driver);
+        _adminPage = new AdminPage();
+        _pimPage = new PimPage();
+        _loginPage = new LoginPage();
     }
 
     [Test]
     public void ValidateAdminFunction()
     {
-        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
+        Assert.That(_driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
 
-        AdminPage.NavigateMainMenu("Admin");
+        _adminPage.NavigateMainMenu("Admin");
 
-        var usersOptionExist = AdminPage.CheckTopNavBarOptionExist("User Management", "Users");
+        var usersOptionExist = _adminPage.CheckTopNavBarOptionExist("User Management", "Users");
         Assert.That(usersOptionExist, Is.True, "Unable to locate User Management > Users");
 
-        var jobTitlesOptionExist = AdminPage.CheckTopNavBarOptionExist("Job", "Job Titles");
+        var jobTitlesOptionExist = _adminPage.CheckTopNavBarOptionExist("Job", "Job Titles");
         Assert.That(jobTitlesOptionExist, Is.True, "Unable to locate Job > Job Titles");
     }
 
     [Test]
     public void EditNationality()
     {
-        AdminPage.NavigateMainMenu("Admin");
+        _adminPage.NavigateMainMenu("Admin");
 
         var nationalityBefore = "Albanian";
         var nationalityAfter = "AlbanianLT";
 
-        AdminPage.ChangeNationality(nationalityBefore, nationalityAfter);
+        _adminPage.ChangeNationality(nationalityBefore, nationalityAfter);
 
-        var nationalityEdittedSuccessfully = AdminPage.CheckIfRecordFound(nationalityAfter);
+        var nationalityEdittedSuccessfully = _adminPage.CheckIfRecordFound(nationalityAfter);
         Assert.That(nationalityEdittedSuccessfully, Is.True, $"Failed to change nationality from {nationalityBefore}, to {nationalityAfter}");
 
-        AdminPage.ChangeNationality(nationalityAfter, nationalityBefore);
-        nationalityEdittedSuccessfully = AdminPage.CheckIfRecordFound(nationalityBefore);
+        _adminPage.ChangeNationality(nationalityAfter, nationalityBefore);
+        nationalityEdittedSuccessfully = _adminPage.CheckIfRecordFound(nationalityBefore);
         Assert.That(nationalityEdittedSuccessfully, Is.True, $"Failed to revert nationality back to original");
     }
 
     [Test]
     public void AddJobTitle()
     {
-        AdminPage.NavigateMainMenu("Admin");
-        AdminPage.NavigateTopNavBar("Job", "Job Titles");
+        _adminPage.NavigateMainMenu("Admin");
+        _adminPage.NavigateTopNavBar("Job", "Job Titles");
 
-        var jobTitleWithRandomId = AdminPage.ModifyWithRandomId(Constants.JobTitle);
-        AdminPage.AddJobTitle(jobTitleWithRandomId);
+        var jobTitleWithRandomId = Constants.JobTitle.ModifyWithRandomId();
+        _adminPage.AddJobTitle(jobTitleWithRandomId);
 
-        var isJobTitleCreatedSuccessfuly = AdminPage.CheckIfRecordFound(jobTitleWithRandomId);
+        var isJobTitleCreatedSuccessfuly = _adminPage.CheckIfRecordFound(jobTitleWithRandomId);
         Assert.That(isJobTitleCreatedSuccessfuly, Is.True, $"Job title: {jobTitleWithRandomId} was not found in job titles list");
     }
 
     [Test]
     public void SearchAdmin()
     {
-        AdminPage.NavigateMainMenu("Admin");
+        _adminPage.NavigateMainMenu("Admin");
 
-        var usernameWithId = AdminPage.ModifyWithRandomId(Constants.UserAdminUsername);
+        var usernameWithId = Constants.UserAdminUsername.ModifyWithRandomId();
 
-        AdminPage.CreateAdminUser(usernameWithId, Constants.Password);
-        AdminPage.NavigateTopNavBar("User Management", "Users");
+        _adminPage.CreateAdminUser(usernameWithId, Constants.Password);
+        _adminPage.NavigateTopNavBar("User Management", "Users");
 
-        AdminPage.SearchAdminUser(usernameWithId);
+        _adminPage.SearchAdminUser(usernameWithId);
 
-        var isRecordFound = AdminPage.CheckIfRecordFound(usernameWithId);
+        var isRecordFound = _adminPage.CheckIfRecordFound(usernameWithId);
         Assert.That(isRecordFound, Is.True);
     }
 
     [Test]
     public void ResetPassword()
     {
-        AdminPage.NavigateMainMenu("Admin");
+        _adminPage.NavigateMainMenu("Admin");
 
-        var usernameWithId = AdminPage.ModifyWithRandomId(Constants.UserAdminUsername);
+        var usernameWithId = Constants.UserAdminUsername.ModifyWithRandomId();
 
-        AdminPage.CreateAdminUser(usernameWithId, Constants.Password);
+        _adminPage.CreateAdminUser(usernameWithId, Constants.Password);
 
-        AdminPage.LogOut();
+        _adminPage.LogOut();
 
-        var message = LoginPage.ResetPassowrd(usernameWithId);
+        var message = _loginPage.ResetPassword(usernameWithId);
         var expectedMessage = "Reset Password link sent successfully";
         Assert.That(message == expectedMessage);
     }
@@ -94,44 +100,44 @@ public class AdminFunctionalityTests : BaseTest
     [Test]
     public void ValidateJobTitlesManagementFunctionality()
     {
-        AdminPage.NavigateMainMenu("Admin");
-        AdminPage.NavigateTopNavBar("Job", "Job Titles");
+        _adminPage.NavigateMainMenu("Admin");
+        _adminPage.NavigateTopNavBar("Job", "Job Titles");
 
-        var jobTitleWithRandomId = AdminPage.ModifyWithRandomId(Constants.JobTitle);
-        AdminPage.AddJobTitle(jobTitleWithRandomId);
+        var jobTitleWithRandomId = Constants.JobTitle.ModifyWithRandomId();
+        _adminPage.AddJobTitle(jobTitleWithRandomId);
 
-        var jobTitleExist = AdminPage.CheckIfRecordFound(jobTitleWithRandomId);
+        var jobTitleExist = _adminPage.CheckIfRecordFound(jobTitleWithRandomId);
         Assert.That(jobTitleExist, Is.True, $"Job title: {jobTitleWithRandomId} was not found in job titles list");
 
-        AdminPage.DeleteRecord(jobTitleWithRandomId);
-        AdminPage.NavigateTopNavBar("Job", "Job Titles");
-        jobTitleExist = AdminPage.CheckIfRecordFound(jobTitleWithRandomId);
+        _adminPage.DeleteRecord(jobTitleWithRandomId);
+        _adminPage.NavigateTopNavBar("Job", "Job Titles");
+        jobTitleExist = _adminPage.CheckIfRecordFound(jobTitleWithRandomId);
         Assert.That(jobTitleExist, Is.False, $"Job title: {jobTitleWithRandomId} was not deleted successfully");
     }
 
     [Test]
     public void ValidateAddCustomFieldsToEmployeeProfile()
     {
-        PimPage.NavigateMainMenu("PIM");
-        PimPage.NavigateTopNavBar("Configuration", "Custom Fields");
+        _pimPage.NavigateMainMenu("PIM");
+        _pimPage.NavigateTopNavBar("Configuration", "Custom Fields");
 
-        var customFieldNameWithId = PimPage.ModifyWithRandomId(Constants.CustomFieldName);
-        PimPage.AddCustomField(customFieldNameWithId, Constants.CustomFieldCategory);
+        var customFieldNameWithId = Constants.CustomFieldName.ModifyWithRandomId();
+        _pimPage.AddCustomField(customFieldNameWithId, Constants.CustomFieldCategory);
 
-        var customFieldExist = AdminPage.CheckIfRecordFound(customFieldNameWithId);
+        var customFieldExist = _adminPage.CheckIfRecordFound(customFieldNameWithId);
         Assert.That(customFieldExist, Is.True, $"Custom Field: {customFieldNameWithId} was not created successfully");
 
-        PimPage.NavigateTopNavBar("Employee List");
-        var employeeNameWithId = PimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
+        _pimPage.NavigateTopNavBar("Employee List");
+        var employeeNameWithId = _pimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
 
-        PimPage.SearchEmployee(employeeNameWithId);
-        PimPage.EditRecord(employeeNameWithId);
-        PimPage.UpdateCustomFieldText(customFieldNameWithId, Constants.CustomFieldCategory, "Dog");
+        _pimPage.SearchEmployee(employeeNameWithId);
+        _pimPage.EditRecord(employeeNameWithId);
+        _pimPage.UpdateCustomFieldText(customFieldNameWithId, Constants.CustomFieldCategory, "Dog");
 
-        PimPage.NavigateTopNavBar("Employee List");
-        PimPage.SearchEmployee(employeeNameWithId);
-        PimPage.EditRecord(employeeNameWithId);
-        var customFieldText = PimPage.GetCustomFieldText(customFieldNameWithId, Constants.CustomFieldCategory);
+        _pimPage.NavigateTopNavBar("Employee List");
+        _pimPage.SearchEmployee(employeeNameWithId);
+        _pimPage.EditRecord(employeeNameWithId);
+        var customFieldText = _pimPage.GetCustomFieldText(customFieldNameWithId, Constants.CustomFieldCategory);
         Assert.That(customFieldText == Constants.CustomFieldText, $"Custom Field Text {customFieldText} is not equal to {Constants.CustomFieldText}");
     }
 }

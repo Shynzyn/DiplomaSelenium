@@ -17,7 +17,7 @@ public class BaseDropDown : BaseWebElement
         return optionText;
     }
 
-    public void SelectByText(string text)
+    public virtual void SelectByText(string text)
     {
         var xpathString = $"//a[contains(., '{text}')]";
         var dropDownOption = new BaseWebElement(By.XPath($"{By.Criteria}{xpathString}"));

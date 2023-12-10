@@ -1,6 +1,6 @@
-﻿namespace Common;
+﻿namespace DiplomaSelenium.Common;
 
-public class SiteUrls
+public static class SiteUrls
 {
     public const string OrangeDemo = "https://opensource-demo.orangehrmlive.com";
     public const string OrangeDemoLoginPage = OrangeDemo + "/web/index.php/auth/login";

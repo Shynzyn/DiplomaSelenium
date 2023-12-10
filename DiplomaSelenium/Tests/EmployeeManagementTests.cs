@@ -1,5 +1,4 @@
-﻿using Common;
-using DiplomaSelenium.Common;
+﻿using DiplomaSelenium.Common;
 using DiplomaSelenium.Pages;
 using NUnit.Framework;
 
@@ -26,7 +25,7 @@ public class EmployeeManagementTests : BaseTest
     [Test]
     public void ValidateAddNewEmployee()
     {
-        _pimPage.NavigateMainMenu("PIM");
+        _pimPage.NavigateMainMenu(MenuNavConstants.Pim);
         _createdEmployeeName = _pimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
 
         var employeeIsFound = _pimPage.SearchEmployee(_createdEmployeeName);
@@ -37,20 +36,17 @@ public class EmployeeManagementTests : BaseTest
     [Test]
     public void ValidatePerformanceManagementFunctionality()
     {
-        _performancePage.NavigateMainMenu("Performance");
+        _performancePage.NavigateMainMenu(MenuNavConstants.Performance);
+        var kpiName = Constants.Kpi.ModifyWithRandomId();
 
-        var randomId = new Random().Next(10000, 99999);
-        var kpiName = "PowerfullKPI" + randomId;
-        var jobTitle = "QA Lead";
-
-        _performancePage.AddNewKpi(kpiName, jobTitle);
-        var kpiFound = _performancePage.SearchKpi(kpiName, jobTitle);
+        _performancePage.AddNewKpi(kpiName, Constants.KpiJobTitle);
+        var kpiFound = _performancePage.SearchKpi(kpiName, Constants.KpiJobTitle);
 
         Assert.True(kpiFound, $"kpi wasn't found");
 
         _performancePage.DeleteKpi(kpiName);
 
-        kpiFound = _performancePage.SearchKpi(kpiName, jobTitle);
+        kpiFound = _performancePage.SearchKpi(kpiName, Constants.KpiJobTitle);
 
         Assert.False(kpiFound, $"kpi was not deleted successfully");
     }
@@ -63,10 +59,10 @@ public class EmployeeManagementTests : BaseTest
         var hiringManager = "m";
 
         var vacancyNameWithRandomId = vacancyName.ModifyWithRandomId();
-        _recruitmentPage.NavigateMainMenu("Recruitment");
+        _recruitmentPage.NavigateMainMenu(MenuNavConstants.Recruitment);
         _recruitmentPage.AddNewVacancy(vacancyNameWithRandomId, jobTitle, hiringManager);
 
-        _recruitmentPage.NavigateTopNavBar("Vacancies");
+        _recruitmentPage.NavigateTopNavBar(TopBarNavConstants.Vacancies);
         _recruitmentPage.SearchVacancy(jobTitle);
 
         var IsRecordFound = _recruitmentPage.CheckIfRecordFound(vacancyNameWithRandomId);
@@ -82,15 +78,15 @@ public class EmployeeManagementTests : BaseTest
     [Test]
     public void AssignLeave()
     {
-        _leavePage.NavigateMainMenu("PIM");
+        _leavePage.NavigateMainMenu(MenuNavConstants.Pim);
         _createdEmployeeName = _pimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
 
-        _leavePage.NavigateMainMenu("Leave");
-        _leavePage.NavigateTopNavBar("Entitlements", "Add Entitlements");
+        _leavePage.NavigateMainMenu(MenuNavConstants.Leave);
+        _leavePage.NavigateTopNavBar(TopBarNavConstants.Entitlements, TopBarNavConstants.AddEntitlements);
         _leavePage.AddEntitlement(_createdEmployeeName, 50);
 
-        _leavePage.NavigateMainMenu("Leave");
-        _leavePage.NavigateTopNavBar("Assign Leave");
+        _leavePage.NavigateMainMenu(MenuNavConstants.Leave);
+        _leavePage.NavigateTopNavBar(TopBarNavConstants.AssignLeave);
         var assignedSuccessfuly = _leavePage.AssignLeave(_createdEmployeeName);
         Assert.That(assignedSuccessfuly, "Leave wasn't assigned successfully");
     }
@@ -98,7 +94,7 @@ public class EmployeeManagementTests : BaseTest
     [Test]
     public void SearchEmployee()
     {
-        _pimPage.NavigateMainMenu("PIM");
+        _pimPage.NavigateMainMenu(MenuNavConstants.Pim);
         _createdEmployeeName = _pimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
 
         var isEmployeeFound = _pimPage.SearchEmployee(_createdEmployeeName);
@@ -108,13 +104,13 @@ public class EmployeeManagementTests : BaseTest
         Assert.That(isEmployeeFound, Is.False, "Employee was not deleted");
 
         _pimPage.LogOut();
-        Assert.That(_driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
+        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
     }
 
     [Test]
     public void EditEmployeeDetails()
     {
-        _pimPage.NavigateMainMenu("PIM");
+        _pimPage.NavigateMainMenu(MenuNavConstants.Pim);
         _createdEmployeeName = _pimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
 
         _pimPage.SearchEmployee(_createdEmployeeName);
@@ -124,13 +120,13 @@ public class EmployeeManagementTests : BaseTest
         Assert.That(isUpdatedEmployeeFound, Is.True, $"Updated employee: {updatedEmployeeName} was not found");
 
         _pimPage.LogOut();
-        Assert.That(_driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
+        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
     }
 
     [Test]
     public void DeleteEmployee()
     {
-        _pimPage.NavigateMainMenu("PIM");
+        _pimPage.NavigateMainMenu(MenuNavConstants.Pim);
         _createdEmployeeName = _pimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
 
         var isEmployeeFound = _pimPage.SearchEmployee(_createdEmployeeName);
@@ -141,18 +137,18 @@ public class EmployeeManagementTests : BaseTest
         Assert.That(isEmployeeFound, Is.False, $"Employee: {_createdEmployeeName} was not deleted");
 
         _pimPage.LogOut();
-        Assert.That(_driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
+        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
     }
 
     [Test]
     public void ValidateCandidateManagementInRecruitmentFunctionality()
     {
-        _recruitmentPage.NavigateMainMenu("Recruitment");
+        _recruitmentPage.NavigateMainMenu(MenuNavConstants.Recruitment);
 
         var firstNameWithId = Constants.EmployeeName.ModifyWithRandomId();
         _recruitmentPage.AddCandidate(firstNameWithId, Constants.EmployeeLastName, Constants.Vacancy, Constants.Email);
 
-        _recruitmentPage.NavigateTopNavBar("Candidates");
+        _recruitmentPage.NavigateTopNavBar(TopBarNavConstants.Candidates);
 
         _recruitmentPage.SearchCandidate(firstNameWithId);
         var isCandidateFound = _recruitmentPage.CheckIfRecordFound(Constants.Vacancy);
@@ -168,7 +164,7 @@ public class EmployeeManagementTests : BaseTest
     [Test]
     public void ValidateAssignSkillToEmployeeProfile()
     {
-        _pimPage.NavigateMainMenu("PIM");
+        _pimPage.NavigateMainMenu(MenuNavConstants.Pim);
         var employeeNameWithId = _pimPage.AddNewEmployee(Constants.EmployeeName, Constants.EmployeeLastName);
         var employeeFound = _pimPage.SearchEmployee(employeeNameWithId);
         Assert.That(employeeFound, $"Employee {employeeNameWithId} was not found");

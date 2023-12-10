@@ -23,34 +23,34 @@ public class AdminPage : BasePage
 
         var nationalityNameInput = new BaseInputField(By.XPath("//label[contains(., 'Name')]/../following-sibling::div/input"));
         nationalityNameInput.ForceEnterText(nationalityEditted);
-        _submitButton.Click();
-        _successToaster.WaitTillGone();
+        SubmitButton.Click();
+        SuccessToaster.WaitTillGone();
     }
 
     public void AddJobTitle(string jobTitle)
     {
-        _addButton.Click();
+        AddButton.Click();
         _jobTitleField.SendKeys(jobTitle);
-        _submitButton.Click();
-        _successToaster.WaitTillGone();
+        SubmitButton.Click();
+        SuccessToaster.WaitTillGone();
     }
 
     public void CreateAdminUser(string username, string password)
     {
-        _addButton.Click();
+        AddButton.Click();
         _userRoleDropDown.SelectByText("Admin");
         _statusDropDown.SelectByText("Enabled");
         _employeeNameField.EnterText("a");
         _usernameField.EnterText(username);
         _passwordField.EnterText(password);
         _passwordRepeatField.EnterText(password);
-        _submitButton.Click();
-        _successToaster.WaitTillGone();
+        SubmitButton.Click();
+        SuccessToaster.WaitTillGone();
     }
 
     public void SearchAdminUser(string username)
     {
         _usernameField.EnterText(username);
-        _submitButton.Click();
+        SubmitButton.Click();
     }
 }

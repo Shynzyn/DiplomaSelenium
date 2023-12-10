@@ -1,4 +1,5 @@
-﻿using DiplomaSelenium.Common.Wrappers;
+﻿using DiplomaSelenium.Common;
+using DiplomaSelenium.Common.Wrappers;
 using DiplomaSelenium.Common.Wrappers.DropDowns;
 using DiplomaSelenium.Common.Wrappers.InputFields;
 using DiplomaSelenium.Common.Wrappers.NavBars;
@@ -20,19 +21,19 @@ public class PimPage : BasePage
     private ClickSelectDropDown _skillDropDown = new(By.XPath("//label[contains(., 'Skill')]/../following-sibling::div/div/div"));
     private BaseInputField _yearsOfExperienceField = new(By.XPath("//label[contains(., 'Years of Experience')]/../following-sibling::div//input"));
     private BaseInputField _commentField = new(By.XPath("//label[contains(., 'Comments')]/../following-sibling::div//textarea"));
+    private readonly string _searchFieldXpathBase = "//label[text()='{0}']/../following-sibling::div/input";
 
-    public string AddNewEmployee(string firstName, string lastName, int id = 0)
+
+    public string AddNewEmployee(string firstName, string lastName)
     {
         _addEmployee.Click();
-
-        var randomId = new Random().Next(10000, 99999);
-        var firstNameWithId = firstName + randomId;
+        var firstNameWithId = firstName.ModifyWithRandomId();
 
         _firstNameField.SendKeys(firstNameWithId);
         _lastNameField.SendKeys(lastName);
 
-        _submitButton.Click();
-        _successToaster.WaitTillGone();
+        SubmitButton.Click();
+        SuccessToaster.WaitTillGone();
 
         return firstNameWithId;
     }
@@ -43,9 +44,9 @@ public class PimPage : BasePage
         try
         {
             _employeeNameField.EnterText(firstName);
-            _submitButton.Click();
-            var IsEmployeeFound = CheckIfRecordFound(firstName);
-            return IsEmployeeFound;
+            SubmitButton.Click();
+            var isEmployeeFound = CheckIfRecordFound(firstName);
+            return isEmployeeFound;
         }
         catch
         {
@@ -57,18 +58,18 @@ public class PimPage : BasePage
     {
         EditRecord(employeeFirstName);
         _firstNameField.ForceEnterText(updatedFirstName);
-        _submitButton.Click();
+        SubmitButton.Click();
         return updatedFirstName;
     }
 
     public void AddCustomField(string customFieldName, string category)
     {
-        _addButton.Click();
+        AddButton.Click();
         _customField.EnterText(customFieldName);
         _customFieldCategory.SelectByText(category);
         _customFieldType.SelectByText("Text or Number");
-        _submitButton.Click();
-        _successToaster.WaitTillGone();
+        SubmitButton.Click();
+        SuccessToaster.WaitTillGone();
     }
 
     private bool CheckIfCustomFieldExistInCategory(string customFieldName, string category)
@@ -83,7 +84,8 @@ public class PimPage : BasePage
             categoryTab.Click();
         }
 
-        var searchableField = _driver.FindElements(By.XPath($"//label[text()='{customFieldName}']/../following-sibling::div/input"));
+        var searchableFieldString = string.Format(_searchFieldXpathBase, customFieldName);
+        var searchableField = Driver.FindElements(By.XPath(searchableFieldString));
         var doesFieldExist = searchableField.Any();
         return doesFieldExist;
     }
@@ -94,7 +96,8 @@ public class PimPage : BasePage
 
         if (customFieldExist)
         {
-            var searchableField = new BaseInputField(By.XPath($"//label[text()='{customFieldName}']/../following-sibling::div/input"));
+            var searchableFieldString = string.Format(_searchFieldXpathBase, customFieldName);
+            var searchableField = new BaseInputField(By.XPath(searchableFieldString));
             searchableField.EnterText(customFieldText);
 
             var saveButton = new BaseButton(By.XPath("//h6[contains(.,'Custom Fields')]/..//button"));
@@ -106,22 +109,15 @@ public class PimPage : BasePage
         }
     }
 
-    public string GetCustomFieldText(string customFieldName, string category)
+    public string GetCustomFieldText(string customFieldName)
     {
-        var customFieldExist = CheckIfCustomFieldExistInCategory(customFieldName, category);
-        var customFieldText = "";
-
-        if (customFieldExist)
-        {
-            var searchableField = new BaseInputField(By.XPath($"//label[text()='{customFieldName}']/../following-sibling::div/input"));
-            customFieldText = searchableField.GetText();
-            return customFieldText;
-        }
-
+        var searchableFieldString = string.Format(_searchFieldXpathBase, customFieldName);
+        var searchableField = new BaseInputField(By.XPath(searchableFieldString));
+        var customFieldText = searchableField.GetText();
         return customFieldText;
     }
 
-    public void AddSkill(string skillName, int yearsExp, string comment = null)
+    public void AddSkill(string skillName, int yearsExp, string comment = "")
     {
         _employeeDetailsNavBar.Navigate("Qualifications");
         var addSkillButton = new BaseButton(By.XPath("//h6[text()='Skills']/../button"));
@@ -130,12 +126,12 @@ public class PimPage : BasePage
         _skillDropDown.SelectByText(skillName);
         _yearsOfExperienceField.SendKeys(yearsExp.ToString());
 
-        if (comment != null)
+        if (comment != "")
         {
             _commentField.EnterText(comment);
         }
 
-        _submitButton.Click();
+        SubmitButton.Click();
     }
 
     public bool CheckIfSkillAssigned(string skillName)

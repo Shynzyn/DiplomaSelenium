@@ -1,5 +1,4 @@
-﻿using Common;
-using DiplomaSelenium.Common;
+﻿using DiplomaSelenium.Common;
 using DiplomaSelenium.Common.Wrappers;
 using OpenQA.Selenium;
 
@@ -17,14 +16,14 @@ public class LoginPage : BasePage
         NavigateTo(SiteUrls.OrangeDemoLoginPage);
         _usernameField.SendKeys(Constants.Username);
         _passwordField.SendKeys(Constants.Password);
-        _submitButton.Click();
+        SubmitButton.Click();
     }
 
     public string ResetPassword(string username)
     {
         _forgotPasswordLink.Click();
         _usernameField.EnterText(username);
-        _submitButton.Click();
+        SubmitButton.Click();
         var message = _passwordLinkSentHeader.Text;
         return message;
     }

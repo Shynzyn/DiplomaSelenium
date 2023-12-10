@@ -1,10 +1,9 @@
-﻿using Common;
+﻿using DiplomaSelenium.Common;
 using DiplomaSelenium.Pages;
 using NUnit.Framework;
 
 namespace DiplomaSelenium.Tests;
 
-[Parallelizable(ParallelScope.Fixtures)]
 public class AuthentificationTests : BaseTest
 {
     private LoginPage _loginPage;
@@ -18,14 +17,14 @@ public class AuthentificationTests : BaseTest
     [Test]
     public void ValidateSuccessfulLogin()
     {
-        Assert.That(_driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
+        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
     }
 
     [Test]
     public void ValidateSuccessfulLogout()
     {
-        Assert.That(_driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
+        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoggedInDashboardPage));
         _loginPage.LogOut();
-        Assert.That(_driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
+        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
     }
 }

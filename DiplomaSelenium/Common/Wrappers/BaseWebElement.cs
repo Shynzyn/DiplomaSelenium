@@ -1,5 +1,4 @@
-﻿using Common;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
 using System.Collections.ObjectModel;
 using System.Drawing;

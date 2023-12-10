@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using DiplomaSelenium.Common;
 using DiplomaSelenium.Pages;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -7,14 +7,14 @@ namespace DiplomaSelenium.Tests;
 
 public abstract class BaseTest
 {
-    protected IWebDriver _driver;
+    protected IWebDriver Driver;
     private LoginPage _loginPage;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        _driver = BrowserFactory.GetDriver(BrowserType.Chrome);
-        _driver.Manage().Window.Maximize();
+        Driver = BrowserFactory.GetDriver(BrowserType.Chrome);
+        Driver.Manage().Window.Maximize();
         _loginPage = new LoginPage();
     }
 
@@ -27,8 +27,8 @@ public abstract class BaseTest
     [TearDown]
     public void TearDown()
     {
-        _driver.ClearLocalStorage();
-        _driver.Navigate().GoToUrl(SiteUrls.OrangeDemoLogout);
+        Driver.ClearLocalStorage();
+        Driver.Navigate().GoToUrl(SiteUrls.OrangeDemoLogout);
     }
 
     [OneTimeTearDown]

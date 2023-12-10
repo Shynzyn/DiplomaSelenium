@@ -2,7 +2,7 @@
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
-namespace Common;
+namespace DiplomaSelenium.Common;
 
 public static class ExtensionMethods
 {

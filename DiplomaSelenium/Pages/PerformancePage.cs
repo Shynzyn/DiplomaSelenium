@@ -1,4 +1,5 @@
-﻿using DiplomaSelenium.Common.Wrappers;
+﻿using DiplomaSelenium.Common;
+using DiplomaSelenium.Common.Wrappers;
 using DiplomaSelenium.Common.Wrappers.DropDowns;
 using OpenQA.Selenium;
 
@@ -6,27 +7,25 @@ namespace DiplomaSelenium.Pages;
 
 public class PerformancePage : BasePage
 {
-    private BaseButton _configureButton = new(By.XPath("(//span[@class='oxd-topbar-body-nav-tab-item'])[1]"));
     private BaseButton _addButton = new(By.XPath("//button[contains(., 'Add')]"));
-    private BaseDropDown _configureDropDown = new(By.XPath("//ul[@class='oxd-dropdown-menu']"));
     private BaseInputField _kpiField = new(By.XPath("(//input[@class='oxd-input oxd-input--active'])[2]"));
     private ClickSelectDropDown _jobTitleDropDown = new(By.XPath("//label[contains(., 'Job Title')]/../following-sibling::div"));
 
     public void AddNewKpi(string kpiName, string jobTitle)
     {
-        NavigateToConfigureKpi();
+        NavigateTopNavBar(TopBarNavConstants.Configure, TopBarNavConstants.Kpi);
         _addButton.Click();
         _kpiField.SendKeys(kpiName);
         _jobTitleDropDown.SelectByText(jobTitle);
-        _submitButton.Click();
-        _successToaster.WaitTillGone();
+        SubmitButton.Click();
+        SuccessToaster.WaitTillGone();
     }
 
     public bool SearchKpi(string kpiName, string JobTitle)
     {
-        NavigateToConfigureKpi();
+        NavigateTopNavBar(TopBarNavConstants.Configure, TopBarNavConstants.Kpi);
         _jobTitleDropDown.SelectByText(JobTitle);
-        _submitButton.Click();
+        SubmitButton.Click();
 
         var kpiFound = CheckIfRecordFound(kpiName);
 
@@ -36,11 +35,5 @@ public class PerformancePage : BasePage
     public void DeleteKpi(string kpiName)
     {
         DeleteRecord(kpiName);
-    }
-
-    private void NavigateToConfigureKpi()
-    {
-        _configureButton.Click();
-        _configureDropDown.SelectByText("KPI");
     }
 }

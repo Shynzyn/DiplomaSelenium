@@ -1,10 +1,9 @@
-﻿using Common;
+﻿using DiplomaSelenium.Common;
 using DiplomaSelenium.Pages;
 using NUnit.Framework;
 
 namespace DiplomaSelenium.Tests;
 
-[Parallelizable(ParallelScope.Fixtures)]
 public class BasicFunctionalityTests : BaseTest
 {
     private DashboardPage _dashboardPage;
@@ -18,18 +17,18 @@ public class BasicFunctionalityTests : BaseTest
     [Test]
     public void ValidateSearchFunctionality()
     {
-        var firstOption = _dashboardPage.SearchMainMenu("Time");
+        var firstOption = _dashboardPage.SearchMainMenu(MenuNavConstants.Time);
         var expectedFirstOption = "Time";
         Assert.That(expectedFirstOption, Is.EqualTo(firstOption));
 
         _dashboardPage.LogOut();
-        Assert.That(_driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
+        Assert.That(Driver.Url, Is.EqualTo(SiteUrls.OrangeDemoLoginPage));
     }
 
     [Test]
     public void ValidateDashboardAccess()
     {
-        _dashboardPage.NavigateMainMenu("Dashboard");
+        _dashboardPage.NavigateMainMenu(MenuNavConstants.Dashboard);
 
         var expectedDashboardTitles = new List<string>() { "Time at Work", "My Actions", "Quick Launch" };
         var dashboardTitles = _dashboardPage.GetDashBoardElementsTitles();

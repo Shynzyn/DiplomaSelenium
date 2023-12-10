@@ -16,4 +16,8 @@ public static class Constants
     public const string CustomFieldText = "Dog";
     public const string SkillName = "C#";
     public const int YearsOfExp = 3;
+    public const string NationalityBefore = "Albanian";
+    public const string NationalityAfter = "AlbanianLT";
+    public const string Kpi = "PowerfullKPI";
+    public const string KpiJobTitle = "QA Lead";
 }

@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using DiplomaSelenium.Common;
 using DiplomaSelenium.Common.Wrappers;
 using DiplomaSelenium.Common.Wrappers.DropDowns;
 using DiplomaSelenium.Common.Wrappers.NavBars;
@@ -9,44 +9,45 @@ namespace DiplomaSelenium.Pages;
 
 public class BasePage
 {
-    protected IWebDriver _driver;
-    protected BaseButton _submitButton = new(By.XPath("//button[@type='submit']"));
-    protected BaseButton _addButton = new(By.XPath("//button[contains(., 'Add')]"));
-    protected BaseButton _confirmButton = new(By.XPath("//button[contains(., 'Confirm')]"));
-    protected BaseWebElement _profileNameSpan = new(By.XPath("//span[@class='oxd-userdropdown-tab']"));
-    protected BaseDropDown _profileDropDown = new(By.XPath("//ul[@class='oxd-dropdown-menu']"));
-    protected BaseDropDown _mainMenuDropDown = new(By.XPath("//ul[@class='oxd-main-menu']"));
-    protected BaseWebElement _successToaster = new(By.XPath("//div[@id='oxd-toaster_1']"));
-    protected BaseInputField _mainMenuSearchField = new(By.XPath("//div[@class='oxd-main-menu-search']/input"));
+    protected IWebDriver Driver;
+    protected BaseButton SubmitButton = new(By.XPath("//button[@type='submit']"));
+    protected BaseButton AddButton = new(By.XPath("//button[contains(., 'Add')]"));
+    protected BaseButton ConfirmButton = new(By.XPath("//button[contains(., 'Confirm')]"));
+    protected BaseWebElement ProfileNameSpan = new(By.XPath("//span[@class='oxd-userdropdown-tab']"));
+    protected BaseDropDown ProfileDropDown = new(By.XPath("//ul[@class='oxd-dropdown-menu']"));
+    protected BaseDropDown MainMenuDropDown = new(By.XPath("//ul[@class='oxd-main-menu']"));
+    protected BaseWebElement SuccessToaster = new(By.XPath("//div[@id='oxd-toaster_1']"));
+    protected BaseInputField MainMenuSearchField = new(By.XPath("//div[@class='oxd-main-menu-search']/input"));
+    private readonly string _recordXpathBase = "//div[@class='oxd-table-card']//div[normalize-space()='{0}']/..";
 
     public BasePage()
     {
-        _driver = BrowserFactory.WebDriver;
+        Driver = BrowserFactory.WebDriver;
     }
 
     public void NavigateTo(string url)
     {
-        _driver.Navigate().GoToUrl(url);
+        Driver.Navigate().GoToUrl(url);
     }
 
     public void LogOut()
     {
-        _profileNameSpan.Click();
-        _profileDropDown.SelectByText("Logout");
+        ProfileNameSpan.Click();
+        ProfileDropDown.SelectByText("Logout");
     }
 
     public void NavigateMainMenu(string text)
     {
-        _mainMenuDropDown.SelectByText(text);
+        MainMenuDropDown.SelectByText(text);
     }
 
-    public void NavigateTopNavBar(string mainOption, string dropDownOption = null)
+    public void NavigateTopNavBar(string mainOption, string dropDownOption = "")
     {
         var topNavBar = new TopNavBar();
         topNavBar.Navigate(mainOption, dropDownOption);
     }
 
-    public bool CheckTopNavBarOptionExist(string mainOption, string dropDownOption = null)
+    public bool CheckTopNavBarOptionExist(string mainOption, string dropDownOption = "")
     {
         var topNavBar = new TopNavBar();
         return topNavBar.CheckIfOptionExist(mainOption, dropDownOption);
@@ -54,21 +55,17 @@ public class BasePage
 
     public string SearchMainMenu(string text)
     {
-        _mainMenuSearchField.SendKeys(text);
-        var firstOption = _mainMenuDropDown.GetOptionText(1);
+        MainMenuSearchField.SendKeys(text);
+        var firstOption = MainMenuDropDown.GetOptionText(1);
         return firstOption;
     }
 
     public bool CheckIfRecordFound(string text)
     {
-        if (text == "")
-        {
-            return false;
-        }
-        var xpathString = $"//div[@class='oxd-table-card']//div[normalize-space()='{text}']/../..";
+        var xpathString = string.Format(_recordXpathBase, text);
         try
         {
-            _driver.GetWait(2).Until(ExpectedConditions.ElementIsVisible(By.XPath(xpathString)));
+            Driver.GetWait(2).Until(ExpectedConditions.ElementIsVisible(By.XPath(xpathString)));
             return true;
         }
         catch
@@ -79,13 +76,15 @@ public class BasePage
 
     public void DeleteRecord(string text)
     {
-        var foundRecord = new RecordElement(By.XPath($"//div[@class='oxd-table-card']//div[normalize-space()='{text}']/../.."));
+        var xpathString = string.Format(_recordXpathBase, text);
+        var foundRecord = new RecordElement(By.XPath(xpathString));
         foundRecord.DeleteRecord();
     }
 
     public void EditRecord(string text)
     {
-        var foundRecord = new RecordElement(By.XPath($"//div[@class='oxd-table-card']//div[normalize-space()='{text}']/../.."));
+        var xpathString = string.Format(_recordXpathBase, text);
+        var foundRecord = new RecordElement(By.XPath(xpathString));
         foundRecord.ClickEditRecord();
     }
 }

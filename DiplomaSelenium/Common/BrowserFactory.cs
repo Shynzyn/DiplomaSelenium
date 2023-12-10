@@ -3,9 +3,9 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 
-namespace Common;
+namespace DiplomaSelenium.Common;
 
-public class BrowserFactory
+public static class BrowserFactory
 {
     [ThreadStatic]
     private static IWebDriver? _driver;

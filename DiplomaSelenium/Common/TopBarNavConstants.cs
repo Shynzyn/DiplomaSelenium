@@ -1,4 +1,5 @@
 ﻿namespace DiplomaSelenium.Common;
+
 public static class TopBarNavConstants
 {
     public const string Job = "Job";

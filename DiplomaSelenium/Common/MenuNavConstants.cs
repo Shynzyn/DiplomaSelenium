@@ -1,4 +1,5 @@
 ﻿namespace DiplomaSelenium.Common;
+
 public static class MenuNavConstants
 {
     public const string Admin = "Admin";

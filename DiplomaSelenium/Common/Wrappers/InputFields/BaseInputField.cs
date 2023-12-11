@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
 
-namespace DiplomaSelenium.Common.Wrappers;
+namespace DiplomaSelenium.Common.Wrappers.InputFields;
 
 public class BaseInputField : BaseWebElement
 {

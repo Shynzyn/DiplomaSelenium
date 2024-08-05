@@ -12,4 +12,4 @@ RUN dotnet restore
 RUN dotnet build --configuration Release --output /app/build
 
 # Run the tests
-CMD ["dotnet", "test", "--no-build", "--verbosity", "normal", "/app/build/DiplomaSelenium.dll"]
+CMD ["dotnet", "test", "--no-build", "--verbosity", "normal", "DiplomaSelenium.dll"]

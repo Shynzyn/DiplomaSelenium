@@ -42,13 +42,13 @@ public class EmployeeManagementTests : BaseTest
         _performancePage.AddNewKpi(kpiName, Constants.KpiJobTitle);
         var kpiFound = _performancePage.SearchKpi(kpiName, Constants.KpiJobTitle);
 
-        Assert.True(kpiFound, $"kpi wasn't found");
+        Assert.That(kpiFound, Is.True, $"kpi wasn't found");
 
         _performancePage.DeleteKpi(kpiName);
 
         kpiFound = _performancePage.SearchKpi(kpiName, Constants.KpiJobTitle);
 
-        Assert.False(kpiFound, $"kpi was not deleted successfully");
+        Assert.That(kpiFound, Is.False, $"kpi was not deleted successfully");
     }
 
     [Test]
